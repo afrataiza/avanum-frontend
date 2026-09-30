@@ -21,7 +21,7 @@ export function Button({
       type="button"
       className={[
         'focus-ring inline-flex min-h-10 items-center justify-center gap-2 rounded-md',
-        'px-5 py-3 text-sm font-bold transition-opacity hover:opacity-90 disabled:opacity-50',
+        'px-5 py-3 text-sm font-bold transition-opacity hover:opacity-90 disabled:opacity-50 border',
         variants[variant],
         fullWidth ? 'w-full' : '',
         className,
