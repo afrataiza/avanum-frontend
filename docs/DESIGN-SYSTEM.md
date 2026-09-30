@@ -10,17 +10,17 @@ O arquivo oficial do Figma é a referência visual. O frontend deve reproduzir o
 
 ### Cores
 
-| Token                   | Valor                       | Uso                                |
-| ----------------------- | --------------------------- | ---------------------------------- |
-| `surface`             | `#121416`                 | fundo principal                    |
-| `surface-elevated`    | `#1A201F`                 | cards e elementos elevados         |
-| `surface-muted`       | `#222A27`                 | inputs, tracks e áreas secundárias |
-| `border`              | `#2A3330`                 | bordas e divisores                 |
-| `content`             | `#E8E0CF`                 | texto principal                    |
-| `content-muted`       | `#A9ACA5`                 | texto secundário                   |
-| `content-accent-muted` | `#687B68`               | labels auxiliares                  |
-| `accent`              | `#C8A96B`                 | destaque principal                 |
-| `accent-border`       | `rgba(200,169,107,0.4)` | bordas de destaque                |
+| Token                 | Valor                 | Uso                                |
+| --------------------- | --------------------- | ---------------------------------- |
+| `surface`           | `#121416`           | fundo principal                    |
+| `surface-elevated`  | `#1A201F`           | cards e elementos elevados         |
+| `surface-muted`     | `#222A27`           | inputs, tracks e áreas secundárias |
+| `border`            | `#2A3330`           | bordas e divisores                 |
+| `content`           | `#E8E0CF`           | texto principal                    |
+| `content-muted`     | `#A9ACA5`           | texto secundário                   |
+| `content-accent-muted` | `#687B68`       | labels auxiliares                  |
+| `accent`            | `#C8A96B`           | destaque principal                 |
+| `accent-border`     | `rgba(200,169,107,0.4)` | bordas de destaque                |
 
 ### Tipografia
 
