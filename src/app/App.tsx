@@ -47,9 +47,7 @@ export function App() {
 
           <div className="flex gap-3">
             <Button>Continuar</Button>
-            <Button className="border-border bg-surface-muted text-content hover:opacity-90">
-              Secundário
-            </Button>
+            <Button variant="secondary">Secundário</Button>
           </div>
         </Card>
 
