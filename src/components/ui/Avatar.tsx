@@ -14,11 +14,7 @@ export function Avatar({ className = '', size = 'user', alt = '', ...props }: Av
   return (
     <img
       alt={alt}
-      className={[
-        sizes[size],
-        'border-[1.5px] border-accent object-cover',
-        className,
-      ].join(' ')}
+      className={[sizes[size], 'border-[1.5px] border-accent object-cover', className].join(' ')}
       {...props}
     />
   )
