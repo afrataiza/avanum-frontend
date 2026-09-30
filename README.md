@@ -54,10 +54,10 @@ npm run check
 
 Somente valores públicos podem ser expostos ao frontend por meio de `VITE_*`.
 
-| Variável                        | Uso                                |
-| ------------------------------- | ---------------------------------- |
-| `VITE_SUPABASE_URL`            | URL pública do projeto Supabase   |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | Chave publicável do Supabase      |
+| Variável                        | Uso                             |
+| ------------------------------- | ------------------------------- |
+| `VITE_SUPABASE_URL`             | URL pública do projeto Supabase |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Chave publicável do Supabase    |
 
 Segredos, service role keys e credenciais privadas não devem ser adicionados ao frontend.
 
