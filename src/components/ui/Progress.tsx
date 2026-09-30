@@ -24,7 +24,9 @@ export function Progress({
       {label || showValue ? (
         <div className="flex items-center justify-between gap-3 text-xs text-content-muted">
           {label ? <span>{label}</span> : <span />}
-          {showValue ? <span className="font-semibold text-content">{Math.round(percentage)}%</span> : null}
+          {showValue ? (
+            <span className="font-semibold text-content">{Math.round(percentage)}%</span>
+          ) : null}
         </div>
       ) : null}
 
@@ -40,7 +42,7 @@ export function Progress({
       >
         <div
           className="h-full rounded-pill bg-accent transition-[width]"
-          style={{ width: `${percentage}%` }}
+          style={{ width: percentage + '%' }}
         />
       </div>
     </div>
