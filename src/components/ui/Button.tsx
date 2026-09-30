@@ -7,7 +7,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const variants = {
   primary: 'border-content bg-accent text-surface',
-  secondary: 'border-border bg-surface-muted text-content',
+  secondary: 'border-border bg-surface-button-secondary text-content',
 } as const
 
 export function Button({
