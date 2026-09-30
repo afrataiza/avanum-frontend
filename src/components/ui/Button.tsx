@@ -2,16 +2,27 @@ import type { ButtonHTMLAttributes } from 'react'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   fullWidth?: boolean
+  variant?: 'primary' | 'secondary'
 }
 
-export function Button({ className = '', fullWidth = false, ...props }: ButtonProps) {
+const variants = {
+  primary: 'border-content bg-accent text-surface',
+  secondary: 'border-border bg-surface-muted text-content',
+} as const
+
+export function Button({
+  className = '',
+  fullWidth = false,
+  variant = 'primary',
+  ...props
+}: ButtonProps) {
   return (
     <button
       type="button"
       className={[
-        'focus-ring inline-flex min-h-10 items-center justify-center gap-2 rounded-md border border-content',
-        'bg-accent px-5 py-3 text-sm font-bold text-surface transition-opacity',
-        'hover:opacity-90 disabled:opacity-50',
+        'focus-ring inline-flex min-h-10 items-center justify-center gap-2 rounded-md',
+        'px-5 py-3 text-sm font-bold transition-opacity hover:opacity-90 disabled:opacity-50',
+        variants[variant],
         fullWidth ? 'w-full' : '',
         className,
       ].join(' ')}
