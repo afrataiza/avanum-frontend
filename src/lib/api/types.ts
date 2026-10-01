@@ -30,6 +30,25 @@ export type UserBook = {
   status: string
   bookId: string
   book: Book
+  createdAt: string | null
+  updatedAt: string | null
+}
+
+export type XPBalance = {
+  userId: string
+  totalXp: number
+  createdAt: string | null
+  updatedAt: string | null
+}
+
+export type XPTransaction = {
+  id: string
+  userId: string
+  amount: number
+  source: string
+  sourceReference: string | null
+  idempotencyKey: string
+  createdAt: string
 }
 
 export type Reading = {
