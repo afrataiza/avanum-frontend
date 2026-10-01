@@ -1,21 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { ProtectedRoute } from '@/components/auth'
-import { AppShell } from '@/components/layout'
-import { PlaceholderPage } from '@/pages/PlaceholderPage'
-import { OnboardingPage } from '@/pages/OnboardingPage'
+import { OnboardingRoute, ProtectedScreen } from './RouteScreens'
 import { SignInPage } from '@/pages/SignInPage'
-
-function ProtectedScreen() {
-  return (
-    <AppShell>
-      <PlaceholderPage />
-    </AppShell>
-  )
-}
-
-function OnboardingRoute() {
-  return <OnboardingPage />
-}
 
 export const router = createBrowserRouter([
   {
