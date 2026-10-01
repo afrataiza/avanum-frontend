@@ -1,24 +1,13 @@
-import { createContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import type { Session, User } from '@supabase/supabase-js'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { supabase } from '@/lib/supabase'
-
-type AuthContextValue = {
-  session: Session | null
-  user: User | null
-  isLoading: boolean
-  signInWithGoogle: () => Promise<{ error: Error | null }>
-  completeOnboarding: () => Promise<{ error: Error | null }>
-  signOut: () => Promise<{ error: Error | null }>
-}
-
-export const AuthContext = createContext<AuthContextValue | null>(null)
+import { AuthContext, type AuthContextValue } from './AuthContext'
 
 type AuthProviderProps = {
   children: ReactNode
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [session, setSession] = useState<Session | null>(null)
+  const [session, setSession] = useState<AuthContextValue['session']>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
