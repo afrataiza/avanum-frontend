@@ -1,17 +1,38 @@
 import { apiRequest } from './client'
-import type { AddToLibraryInput, UserBook } from './types'
+import type { AddToLibraryInput, Book, UserBook } from './types'
 
-type BackendUserBook = {
+type BackendBook = {
   id: string
-  status: string
-  book: AddToLibraryInput
+  external_id: string
+  title: string
+  authors: string[]
+  synopsis: string | null
+  cover_url: string | null
+  publication_year: number | null
+  categories: string[]
+  language: string | null
+  isbn10: string | null
+  isbn13: string | null
 }
 
 type BackendAddToLibraryResponse = {
   id: string
   status: string
-  book: AddToLibraryInput
+  book: BackendBook
 }
+
+const toBook = (book: BackendBook): Book => ({
+  id: book.id,
+  title: book.title,
+  authors: book.authors,
+  synopsis: book.synopsis,
+  coverUrl: book.cover_url,
+  publicationYear: book.publication_year,
+  categories: book.categories,
+  language: book.language,
+  isbn10: book.isbn10,
+  isbn13: book.isbn13,
+})
 
 export const libraryApi = {
   add(book: AddToLibraryInput) {
@@ -23,15 +44,8 @@ export const libraryApi = {
         id: result.id,
         status: result.status,
         bookId: result.book.id,
-        book: result.book,
+        book: toBook(result.book),
       }),
-    )
-  },
-
-  // Reserved for the future backend listing contract.
-  list(): Promise<BackendUserBook[]> {
-    return Promise.reject(
-      new Error('O endpoint de listagem da biblioteca ainda não existe no backend.'),
     )
   },
 }
