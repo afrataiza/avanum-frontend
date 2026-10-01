@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import { ProtectedRoute } from '@/components/auth'
 import { AppShell } from '@/components/layout'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
+import { OnboardingPage } from '@/pages/OnboardingPage'
 import { SignInPage } from '@/pages/SignInPage'
 
 function ProtectedScreen() {
@@ -12,6 +13,10 @@ function ProtectedScreen() {
   )
 }
 
+function OnboardingRoute() {
+  return <OnboardingPage />
+}
+
 export const router = createBrowserRouter([
   {
     path: '/entrar',
@@ -20,6 +25,10 @@ export const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
+      {
+        path: '/onboarding',
+        element: <OnboardingRoute />,
+      },
       {
         path: '/',
         element: <ProtectedScreen />,
