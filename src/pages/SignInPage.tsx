@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { Button, FeedbackState } from '@/components/ui'
 import { useAuth } from '@/features/auth'
 
@@ -33,13 +33,11 @@ function GoogleIcon() {
 
 export function SignInPage() {
   const { isLoading, signInWithGoogle, user } = useAuth()
-  const navigate = useNavigate()
   const [isSigningIn, setIsSigningIn] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   if (!isLoading && user) {
-    navigate('/', { replace: true })
-    return null
+    return <Navigate to="/" replace />
   }
 
   async function handleGoogleSignIn() {
