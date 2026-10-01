@@ -88,7 +88,6 @@ export function BottomNavigation() {
           </NavLink>
         ))}
       </div>
-      <div aria-hidden="true" className="mx-auto h-1 w-[134px] rounded-pill bg-content-muted" />
     </nav>
   )
 }
