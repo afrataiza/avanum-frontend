@@ -8,7 +8,11 @@ function CompassIcon({ className = '' }: NavigationIconProps) {
   return (
     <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24">
       <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.5" />
-      <path d="m14.8 9.2-1.9 3.7-3.7 1.9 1.9-3.7 3.7-1.9Z" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="m14.8 9.2-1.9 3.7-3.7 1.9 1.9-3.7 3.7-1.9Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
     </svg>
   )
 }
@@ -17,7 +21,12 @@ function SearchIcon({ className = '' }: NavigationIconProps) {
   return (
     <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24">
       <circle cx="10.8" cy="10.8" r="6.3" stroke="currentColor" strokeWidth="1.5" />
-      <path d="m15.5 15.5 4 4" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" />
+      <path
+        d="m15.5 15.5 4 4"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
     </svg>
   )
 }
@@ -43,7 +52,11 @@ function GlobeIcon({ className = '' }: NavigationIconProps) {
   return (
     <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24">
       <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M3.8 12h16.4M12 3.5c2.1 2.2 3.1 5 3.1 8.5s-1 6.3-3.1 8.5c-2.1-2.2-3.1-5-3.1-8.5s1-6.3 3.1-8.5Z" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M3.8 12h16.4M12 3.5c2.1 2.2 3.1 5 3.1 8.5s-1 6.3-3.1 8.5c-2.1-2.2-3.1-5-3.1-8.5s1-6.3 3.1-8.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
     </svg>
   )
 }
