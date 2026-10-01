@@ -5,12 +5,7 @@ import { useAuth } from '@/features/auth'
 
 function GoogleIcon() {
   return (
-    <svg
-      aria-hidden="true"
-      className="size-5"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
       <path
         d="M21.805 12.23c0-.79-.065-1.38-.206-1.995H12.24v3.78h5.5c-.111.94-.676 2.36-1.944 3.315l-.018.127 2.82 2.186.195.02c1.791-1.654 3.012-4.088 3.012-7.433Z"
         fill="currentColor"
@@ -55,9 +50,7 @@ export function SignInPage() {
   return (
     <main className="flex min-h-dvh items-center justify-center bg-surface px-6 py-10">
       <section className="w-full max-w-sm text-center">
-        <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-accent">
-          Avanum
-        </p>
+        <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-accent">Avanum</p>
 
         <h1 className="font-display text-4xl font-semibold text-content">
           Sua jornada começa aqui
@@ -68,12 +61,7 @@ export function SignInPage() {
         </p>
 
         <div className="mt-8">
-          <Button
-            fullWidth
-            variant="secondary"
-            onClick={handleGoogleSignIn}
-            disabled={isSigningIn}
-          >
+          <Button fullWidth variant="secondary" onClick={handleGoogleSignIn} disabled={isSigningIn}>
             <GoogleIcon />
             {isSigningIn ? 'Abrindo o Google...' : 'Continuar com Google'}
           </Button>

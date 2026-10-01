@@ -69,7 +69,7 @@ export function BottomNavigation() {
       aria-label="Navegação principal"
       className="shrink-0 border-t border-border bg-surface pb-[max(8px,env(safe-area-inset-bottom))]"
     >
-      <div className="mx-auto flex h-[68px] w-full max-w-md items-start justify-around">
+      <div className="mx-auto flex h-17 w-full max-w-md items-start justify-around">
         {navigationItems.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
@@ -83,7 +83,7 @@ export function BottomNavigation() {
               ].join(' ')
             }
           >
-            <Icon className="size-[22px]" />
+            <Icon className="size-5.5" />
             <span>{label}</span>
           </NavLink>
         ))}

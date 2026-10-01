@@ -5,12 +5,7 @@ import { useAuth } from '@/features/auth'
 function getUserName(user: ReturnType<typeof useAuth>['user']) {
   const metadata = user?.user_metadata
 
-  return (
-    metadata?.full_name ??
-    metadata?.name ??
-    user?.email?.split('@')[0] ??
-    'Exploradora'
-  )
+  return metadata?.full_name ?? metadata?.name ?? user?.email?.split('@')[0] ?? 'Exploradora'
 }
 
 function getFirstName(name: string) {
@@ -58,7 +53,7 @@ export function OnboardingPage() {
         {avatarUrl ? (
           <Avatar src={avatarUrl} size="onboarding" alt="" />
         ) : (
-          <div className="flex size-12 items-center justify-center rounded-[24px] border-[1.5px] border-accent bg-surface-elevated text-sm font-bold text-accent">
+          <div className="flex size-12 items-center justify-center rounded-3xl border-[1.5px] border-accent bg-surface-elevated text-sm font-bold text-accent">
             {firstName.charAt(0).toUpperCase()}
           </div>
         )}
@@ -72,8 +67,8 @@ export function OnboardingPage() {
         </h1>
 
         <p className="mt-4 max-w-xs text-sm leading-6 text-content-muted">
-          Sua jornada de leitura começa agora. Vamos descobrir novas histórias,
-          registrar suas leituras e explorar cada conquista pelo caminho.
+          Sua jornada de leitura começa agora. Vamos descobrir novas histórias, registrar suas
+          leituras e explorar cada conquista pelo caminho.
         </p>
 
         <div className="mt-8 w-full">
