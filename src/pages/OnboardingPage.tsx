@@ -42,23 +42,6 @@ function ArrowRightIcon() {
   )
 }
 
-function ExplorerMark() {
-  return (
-    <div className="flex size-8 items-center justify-center rounded-full border border-accent text-accent">
-      <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4">
-        <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-        <path
-          d="m14.9 9.1-2 4.2-4.2 2 2-4.2 4.2-2Z"
-          fill="none"
-          stroke="currentColor"
-          strokeLinejoin="round"
-          strokeWidth="1.4"
-        />
-      </svg>
-    </div>
-  )
-}
-
 export function OnboardingPage() {
   const { completeOnboarding, isLoading, user } = useAuth()
   const navigate = useNavigate()
@@ -111,20 +94,17 @@ export function OnboardingPage() {
           </p>
         </header>
 
-        <div
-          className="mt-6 flex aspect-[354/221] w-full items-center justify-center overflow-hidden rounded-[16px] border border-border bg-surface-muted"
-          role="img"
-          aria-label="Ilustração de uma biblioteca encantada"
-        >
-          <div className="flex flex-col items-center gap-2 text-content-accent-muted">
-            <CompassIcon />
-            <span className="text-[10px] uppercase tracking-[0.12em]">Avanum</span>
-          </div>
+        <div className="mt-6 aspect-[354/221] w-full overflow-hidden rounded-[16px] border border-border bg-surface-muted">
+          <img
+            src="/onboarding-illustration.png"
+            alt="Biblioteca encantada do Avanum"
+            className="h-full w-full object-cover"
+          />
         </div>
 
         <div className="mt-6 text-center">
           <h1 className="font-display text-[30px] font-semibold leading-tight text-content">
-            Olá, Exploradora!
+            Olá, {firstName}!
           </h1>
 
           <p className="mt-3 text-[14px] leading-[21px] text-content-muted">
@@ -140,9 +120,7 @@ export function OnboardingPage() {
           className="rounded-[12px] border border-accent-border bg-surface-elevated px-3 py-3"
         >
           <div className="flex items-center gap-3">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-accent bg-surface-muted font-display text-xl font-semibold text-accent">
-              E
-            </div>
+            <Avatar src="/elora-avatar.png" size="elora" alt="Elora" />
 
             <div className="min-w-0 text-left">
               <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-accent">Elora</p>
@@ -152,23 +130,6 @@ export function OnboardingPage() {
             </div>
           </div>
         </section>
-
-        <div className="mt-6">
-          <label
-            htmlFor="explorer-name"
-            className="text-[11px] font-bold uppercase tracking-[0.04em] text-accent"
-          >
-            Nome do explorador
-          </label>
-
-          <div
-            id="explorer-name"
-            className="mt-2 flex min-h-12 items-center gap-3 rounded-[12px] bg-surface-muted px-3.5 text-sm text-content"
-          >
-            <ExplorerMark />
-            <span className="truncate">{fullName}</span>
-          </div>
-        </div>
 
         <div className="mt-9">
           <Button
