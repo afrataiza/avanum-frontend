@@ -67,7 +67,7 @@ export function OnboardingPage() {
 
   const fullName = getUserName(user)
   const firstName = getFirstName(fullName)
-  const avatarUrl = user.user_metadata?.avatar_url
+  // const avatarUrl = user.user_metadata?.avatar_url
 
   async function handleStart() {
     const { error } = await completeOnboarding()
@@ -79,7 +79,7 @@ export function OnboardingPage() {
 
   return (
     <main className="min-h-dvh overflow-y-auto bg-surface px-6 py-5">
-      <section className="mx-auto flex w-full max-w-[354px] flex-col pb-6">
+      <section className="mx-auto flex w-full max-w-88.5 flex-col pb-6">
         <header className="flex flex-col items-center text-center">
           <div className="flex size-8 items-center justify-center text-accent">
             <CompassIcon />
@@ -94,7 +94,7 @@ export function OnboardingPage() {
           </p>
         </header>
 
-        <div className="mt-6 aspect-[354/221] w-full overflow-hidden rounded-[16px] border border-border bg-surface-muted">
+        <div className="mt-6 aspect-354/221 w-full overflow-hidden rounded-[16px] border border-border bg-surface-muted">
           <img
             src="/onboarding-illustration.png"
             alt="Biblioteca encantada do Avanum"
@@ -107,7 +107,7 @@ export function OnboardingPage() {
             Olá, {firstName}!
           </h1>
 
-          <p className="mt-3 text-[14px] leading-[21px] text-content-muted">
+          <p className="mt-3 text-[14px] leading-5.25 text-content-muted">
             Avanum é um mundo onde cada página folheada é uma colina escalada e cada livro lido é
             uma grande expedição concluída.
           </p>
@@ -124,7 +124,7 @@ export function OnboardingPage() {
 
             <div className="min-w-0 text-left">
               <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-accent">Elora</p>
-              <p className="mt-0.5 text-[13px] leading-[17px] text-content">
+              <p className="mt-0.5 text-[13px] leading-4.25 text-content">
                 "Bem-vinda ao Avanum! Sou a Elora, sua guia neste mundo de histórias."
               </p>
             </div>
