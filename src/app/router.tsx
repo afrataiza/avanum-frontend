@@ -1,38 +1,36 @@
 import { createBrowserRouter } from 'react-router-dom'
-import { AppShell } from '@/components/layout'
-import { PlaceholderPage } from '@/pages/PlaceholderPage'
+import { ProtectedRoute } from '@/components/auth'
+import { OnboardingRoute, ProtectedScreen } from './RouteScreens'
+import { SignInPage } from '@/pages/SignInPage'
 
 export const router = createBrowserRouter([
   {
-    path: '/',
-    element: (
-      <AppShell>
-        <PlaceholderPage />
-      </AppShell>
-    ),
+    path: '/entrar',
+    element: <SignInPage />,
   },
   {
-    path: '/explorar',
-    element: (
-      <AppShell>
-        <PlaceholderPage />
-      </AppShell>
-    ),
-  },
-  {
-    path: '/biblioteca',
-    element: (
-      <AppShell>
-        <PlaceholderPage />
-      </AppShell>
-    ),
-  },
-  {
-    path: '/mapa',
-    element: (
-      <AppShell>
-        <PlaceholderPage />
-      </AppShell>
-    ),
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: '/onboarding',
+        element: <OnboardingRoute />,
+      },
+      {
+        path: '/',
+        element: <ProtectedScreen />,
+      },
+      {
+        path: 'explorar',
+        element: <ProtectedScreen />,
+      },
+      {
+        path: 'biblioteca',
+        element: <ProtectedScreen />,
+      },
+      {
+        path: 'mapa',
+        element: <ProtectedScreen />,
+      },
+    ],
   },
 ])
