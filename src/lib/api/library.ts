@@ -34,7 +34,30 @@ const toBook = (book: BackendBook): Book => ({
   isbn13: book.isbn13,
 })
 
+type BackendUserBook = {
+  id: string
+  status: string
+  created_at: string | null
+  updated_at: string | null
+  book: BackendBook
+}
+
 export const libraryApi = {
+  list() {
+    return apiRequest<{ items: BackendUserBook[] }>('user-library').then((result) =>
+      result.items.map(
+        (item): UserBook => ({
+          id: item.id,
+          status: item.status,
+          bookId: item.book.id,
+          book: toBook(item.book),
+          createdAt: item.created_at,
+          updatedAt: item.updated_at,
+        }),
+      ),
+    )
+  },
+
   add(book: AddToLibraryInput) {
     return apiRequest<BackendAddToLibraryResponse>('add-to-library', {
       method: 'POST',
