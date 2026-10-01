@@ -12,13 +12,60 @@ function getFirstName(name: string) {
   return name.trim().split(/\s+/)[0] || 'Exploradora'
 }
 
+function CompassIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="size-5">
+      <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="m15.9 8.1-2.5 5.3-5.3 2.5 2.5-5.3 5.3-2.5Z"
+        fill="none"
+        stroke="currentColor"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+    </svg>
+  )
+}
+
+function ArrowRightIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4">
+      <path
+        d="M5 12h13m-5-5 5 5-5 5"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+      />
+    </svg>
+  )
+}
+
+function ExplorerMark() {
+  return (
+    <div className="flex size-8 items-center justify-center rounded-full border border-accent text-accent">
+      <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4">
+        <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        <path
+          d="m14.9 9.1-2 4.2-4.2 2 2-4.2 4.2-2Z"
+          fill="none"
+          stroke="currentColor"
+          strokeLinejoin="round"
+          strokeWidth="1.4"
+        />
+      </svg>
+    </div>
+  )
+}
+
 export function OnboardingPage() {
   const { completeOnboarding, isLoading, user } = useAuth()
   const navigate = useNavigate()
 
   if (isLoading) {
     return (
-      <main className="flex min-h-dvh items-center justify-center px-6">
+      <main className="flex min-h-dvh items-center justify-center bg-surface px-6">
         <FeedbackState
           title="Preparando sua jornada"
           description="Estamos carregando seu perfil."
@@ -48,32 +95,89 @@ export function OnboardingPage() {
   }
 
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-surface px-6 py-10">
-      <section className="flex w-full max-w-sm flex-col items-center text-center">
-        {avatarUrl ? (
-          <Avatar src={avatarUrl} size="onboarding" alt="" />
-        ) : (
-          <div className="flex size-12 items-center justify-center rounded-3xl border-[1.5px] border-accent bg-surface-elevated text-sm font-bold text-accent">
-            {firstName.charAt(0).toUpperCase()}
+    <main className="min-h-dvh overflow-y-auto bg-surface px-6 py-5">
+      <section className="mx-auto flex w-full max-w-[354px] flex-col pb-6">
+        <header className="flex flex-col items-center text-center">
+          <div className="flex size-8 items-center justify-center text-accent">
+            <CompassIcon />
           </div>
-        )}
 
-        <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-accent">
-          Bem-vinda ao Avanum
-        </p>
+          <div className="mt-2 font-display text-[30px] font-semibold leading-none tracking-[0.08em] text-accent">
+            AVANUM
+          </div>
 
-        <h1 className="mt-3 font-display text-4xl font-semibold leading-tight text-content">
-          Olá, {firstName}.
-        </h1>
+          <p className="mt-2 text-[10px] font-medium uppercase tracking-[0.08em] text-content-accent-muted">
+            Diário de bordo literário
+          </p>
+        </header>
 
-        <p className="mt-4 max-w-xs text-sm leading-6 text-content-muted">
-          Sua jornada de leitura começa agora. Vamos descobrir novas histórias, registrar suas
-          leituras e explorar cada conquista pelo caminho.
-        </p>
+        <div
+          className="mt-6 flex aspect-[354/221] w-full items-center justify-center overflow-hidden rounded-[16px] border border-border bg-surface-muted"
+          role="img"
+          aria-label="Ilustração de uma biblioteca encantada"
+        >
+          <div className="flex flex-col items-center gap-2 text-content-accent-muted">
+            <CompassIcon />
+            <span className="text-[10px] uppercase tracking-[0.12em]">Avanum</span>
+          </div>
+        </div>
 
-        <div className="mt-8 w-full">
-          <Button fullWidth onClick={handleStart}>
-            Começar minha jornada
+        <div className="mt-6 text-center">
+          <h1 className="font-display text-[30px] font-semibold leading-tight text-content">
+            Olá, Exploradora!
+          </h1>
+
+          <p className="mt-3 text-[14px] leading-[21px] text-content-muted">
+            Avanum é um mundo onde cada página folheada é uma colina escalada e cada livro lido é
+            uma grande expedição concluída.
+          </p>
+        </div>
+
+        <div className="my-6 border-t border-dashed border-content-accent-muted" />
+
+        <section
+          aria-label="Mensagem da Elora"
+          className="rounded-[12px] border border-accent-border bg-surface-elevated px-3 py-3"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-accent bg-surface-muted font-display text-xl font-semibold text-accent">
+              E
+            </div>
+
+            <div className="min-w-0 text-left">
+              <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-accent">Elora</p>
+              <p className="mt-0.5 text-[13px] leading-[17px] text-content">
+                "Bem-vinda ao Avanum! Sou a Elora, sua guia neste mundo de histórias."
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <div className="mt-6">
+          <label
+            htmlFor="explorer-name"
+            className="text-[11px] font-bold uppercase tracking-[0.04em] text-accent"
+          >
+            Nome do explorador
+          </label>
+
+          <div
+            id="explorer-name"
+            className="mt-2 flex min-h-12 items-center gap-3 rounded-[12px] bg-surface-muted px-3.5 text-sm text-content"
+          >
+            <ExplorerMark />
+            <span className="truncate">{fullName}</span>
+          </div>
+        </div>
+
+        <div className="mt-9">
+          <Button
+            fullWidth
+            onClick={handleStart}
+            className="min-h-11 gap-2 rounded-[12px] px-5 py-2.5 text-sm"
+          >
+            Iniciar Expedição
+            <ArrowRightIcon />
           </Button>
         </div>
       </section>
