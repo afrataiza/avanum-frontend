@@ -14,6 +14,7 @@ type AuthContextValue = {
   user: User | null
   isLoading: boolean
   signInWithGoogle: () => Promise<{ error: Error | null }>
+  completeOnboarding: () => Promise<{ error: Error | null }>
   signOut: () => Promise<{ error: Error | null }>
 }
 
@@ -64,6 +65,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
             redirectTo: window.location.origin,
           },
         })
+
+        return { error }
+      },
+      completeOnboarding: async () => {
+        const { data, error } = await supabase.auth.updateUser({
+          data: {
+            onboarding_completed: true,
+          },
+        })
+
+        if (!error && data.user) {
+          setSession((currentSession) =>
+            currentSession
+              ? {
+                  ...currentSession,
+                  user: data.user,
+                }
+              : currentSession,
+          )
+        }
 
         return { error }
       },
