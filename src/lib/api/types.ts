@@ -37,6 +37,11 @@ export type XPBalance = {
   totalXp: number
   createdAt: string | null
   updatedAt: string | null
+  level: number
+  levelName: string
+  levelXp: number
+  levelXpRequired: number
+  levelProgress: number
 }
 
 export type XPTransaction = {
