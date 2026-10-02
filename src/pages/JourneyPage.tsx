@@ -17,6 +17,14 @@ function formatObjective(expedition: UserExpedition) {
   return 'livros'
 }
 
+function SectionTitle({ children }: { children: string }) {
+  return (
+    <h2 className="mb-3 font-display text-[21px] font-semibold leading-tight text-content">
+      {children}
+    </h2>
+  )
+}
+
 function JourneyLoading() {
   return (
     <div className="space-y-4 px-6 py-6" aria-busy="true">
@@ -54,7 +62,6 @@ function ActiveReadingCard({ userBook }: { userBook: UserBook }) {
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-bold uppercase tracking-wide text-accent">Em leitura</p>
           <h2 className="mt-1 font-display text-[22px] font-semibold leading-tight text-content">
             {userBook.book.title}
           </h2>
@@ -92,9 +99,6 @@ function ExpeditionCard({ expedition }: { expedition: UserExpedition }) {
     <Card compact>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-accent">
-            Próximo objetivo
-          </p>
           <h2 className="mt-1 font-display text-[20px] font-semibold text-content">
             {expedition.expedition.name}
           </h2>
@@ -249,10 +253,12 @@ export function JourneyPage() {
         </div>
       </header>
 
-      {activeReading ? (
-        <ActiveReadingCard userBook={activeReading} />
-      ) : (
-        <Card>
+      <section>
+        <SectionTitle>Leitura Atual</SectionTitle>
+        {activeReading ? (
+          <ActiveReadingCard userBook={activeReading} />
+        ) : (
+          <Card>
           <p className="text-[11px] font-bold uppercase tracking-wide text-accent">Sua jornada</p>
           <h2 className="mt-1 font-display text-[22px] font-semibold text-content">
             Pronto para começar uma nova leitura?
@@ -261,21 +267,20 @@ export function JourneyPage() {
             Explore o catálogo ou escolha um livro da sua biblioteca para iniciar sua próxima aventura.
           </p>
 
-        </Card>
-      )}
+          </Card>
+        )}
+      </section>
 
-      {activeExpedition ? <ExpeditionCard expedition={activeExpedition} /> : null}
+      {activeExpedition ? (
+        <section>
+          <SectionTitle>Próxima Expedição</SectionTitle>
+          <ExpeditionCard expedition={activeExpedition} />
+        </section>
+      ) : null}
 
       {recentDiscoveries.length > 0 ? (
         <section>
-          <div className="mb-3 flex items-end justify-between gap-3">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-accent">Descobertas</p>
-              <h2 className="mt-1 font-display text-[22px] font-semibold text-content">
-                Recentes
-              </h2>
-            </div>
-          </div>
+          <SectionTitle>Descobertas Recentes</SectionTitle>
 
           <div className="grid grid-cols-3 gap-3">
             {recentDiscoveries.slice(0, 3).map((achievement) => (
