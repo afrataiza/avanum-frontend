@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/features/auth'
-import { achievementsApi, expeditionsApi, libraryApi } from '@/lib/api'
-import type { UserAchievement, UserBook, UserExpedition } from '@/lib/api'
+import { achievementsApi, expeditionsApi, libraryApi, xpApi } from '@/lib/api'
+import type { UserAchievement, UserBook, UserExpedition, XPBalance } from '@/lib/api'
 import { Avatar, Badge, Button, Card, EloraMessage, FeedbackState, Progress } from '@/components/ui'
 
 function getFirstName(user: ReturnType<typeof useAuth>['user']) {
@@ -140,6 +140,7 @@ export function JourneyPage() {
   const [library, setLibrary] = useState<UserBook[]>([])
   const [expeditions, setExpeditions] = useState<UserExpedition[]>([])
   const [achievements, setAchievements] = useState<UserAchievement[]>([])
+  const [xpBalance, setXpBalance] = useState<XPBalance | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(false)
 
@@ -150,12 +151,14 @@ export function JourneyPage() {
       libraryApi.list(),
       expeditionsApi.listMine(),
       achievementsApi.listMine(),
+      xpApi.getMine(),
     ])
-      .then(([nextLibrary, nextExpeditions, nextAchievements]) => {
+      .then(([nextLibrary, nextExpeditions, nextAchievements, nextXp]) => {
         if (!active) return
         setLibrary(nextLibrary)
         setExpeditions(nextExpeditions)
         setAchievements(nextAchievements)
+        setXpBalance(nextXp.balance)
       })
       .catch(() => {
         if (active) setError(true)
@@ -207,23 +210,42 @@ export function JourneyPage() {
 
   return (
     <div className="space-y-6 px-6 pb-8 pt-6">
-      <header className="flex items-center justify-between gap-4">
-        <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-accent">Jornada</p>
-          <h1 className="mt-1 font-display text-[28px] font-semibold leading-none text-content">
-            Olá, {getFirstName(user)}
-          </h1>
+      <header className="space-y-4">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Avatar
+              src={user?.user_metadata?.avatar_url}
+              alt=""
+              size="user"
+            />
+            <div>
+              <p className="text-[13px] text-content-muted">Boa noite,</p>
+              <h1 className="font-display text-[22px] font-semibold leading-none text-content">
+                {getFirstName(user)}
+              </h1>
+            </div>
+          </div>
+
+          <Badge>Nível —</Badge>
         </div>
 
-        <Avatar
-          src={user?.user_metadata?.avatar_url}
-          alt=""
-          size="user"
-        />
+        <div>
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-content-accent-muted">
+              Exploradora
+            </p>
+            <p className="text-[12px] font-bold text-accent">
+              {(xpBalance?.totalXp ?? 0).toLocaleString('pt-BR')} XP
+            </p>
+          </div>
+          <div className="mt-2">
+            <Progress value={xpBalance?.totalXp ?? 0} max={Math.max(1, xpBalance?.totalXp ?? 1)} />
+          </div>
+        </div>
       </header>
 
       <EloraMessage>
-        Continue sua aventura. Cada página lida é um novo passo na sua jornada.
+        Já experimentou ler ao ar livre? Muda completamente a experiência!
       </EloraMessage>
 
       {activeReading ? (
@@ -269,14 +291,6 @@ export function JourneyPage() {
         </section>
       ) : null}
 
-      <div className="grid grid-cols-2 gap-3">
-        <Button variant="secondary" onClick={() => navigate('/explorar')}>
-          Explorar
-        </Button>
-        <Button variant="secondary" onClick={() => navigate('/biblioteca')}>
-          Biblioteca
-        </Button>
-      </div>
     </div>
   )
 }
