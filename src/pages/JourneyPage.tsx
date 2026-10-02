@@ -122,7 +122,10 @@ function DiscoveryCard({ achievement }: { achievement: UserAchievement }) {
   return (
     <Card compact className="min-h-24 text-center">
       <div className="mx-auto flex size-8 items-center justify-center rounded-full bg-surface-muted text-accent">
-        <span aria-hidden="true" className="text-sm">✦</span>
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4">
+          <circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+          <path d="m14.8 9.2-2.1 4.2-4.2 2.1 2.1-4.2 4.2-2.1Z" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        </svg>
       </div>
       <h3 className="mt-2 text-[11px] font-bold leading-tight text-content">
         {achievement.achievement.name}
@@ -240,8 +243,8 @@ export function JourneyPage() {
               {(xpBalance?.totalXp ?? 0).toLocaleString('pt-BR')} XP
             </p>
           </div>
-          <div className="mt-2 h-1.5 overflow-hidden rounded-pill bg-surface-muted">
-            <div className="h-full w-[68%] rounded-pill bg-accent" />
+          <div className="mt-2 h-1.5 overflow-hidden rounded-pill bg-surface-muted" aria-hidden="true">
+            <div className="h-full w-0 rounded-pill bg-accent" />
           </div>
         </div>
       </header>
