@@ -68,6 +68,8 @@ export const libraryApi = {
         status: result.status,
         bookId: result.book.id,
         book: toBook(result.book),
+        createdAt: null,
+        updatedAt: null,
       }),
     )
   },
