@@ -1,5 +1,5 @@
 import { apiRequest } from './client'
-import type { AddToLibraryInput, Book, UserBook } from './types'
+import type { AddToLibraryInput, Book, Reading, UserBook } from './types'
 
 type BackendBook = {
   id: string
@@ -34,13 +34,42 @@ const toBook = (book: BackendBook): Book => ({
   isbn13: book.isbn13,
 })
 
+type BackendReading = {
+  id: string
+  user_book_id: string
+  format: Reading['format']
+  total_units: number
+  current_units: number
+  status: Reading['status']
+  started_at: string
+  paused_at: string | null
+  completed_at: string | null
+  created_at: string
+  updated_at: string
+}
+
 type BackendUserBook = {
   id: string
   status: string
   created_at: string | null
   updated_at: string | null
   book: BackendBook
+  reading: BackendReading | null
 }
+
+const toReading = (reading: BackendReading): Reading => ({
+  id: reading.id,
+  userBookId: reading.user_book_id,
+  format: reading.format,
+  totalUnits: reading.total_units,
+  currentUnits: reading.current_units,
+  status: reading.status,
+  startedAt: reading.started_at,
+  pausedAt: reading.paused_at,
+  completedAt: reading.completed_at,
+  createdAt: reading.created_at,
+  updatedAt: reading.updated_at,
+})
 
 export const libraryApi = {
   list() {
@@ -52,6 +81,7 @@ export const libraryApi = {
         book: toBook(item.book),
         createdAt: item.created_at,
         updatedAt: item.updated_at,
+        reading: item.reading ? toReading(item.reading) : null,
       })),
     )
   },
@@ -67,6 +97,7 @@ export const libraryApi = {
       book: toBook(result.book),
       createdAt: null,
       updatedAt: null,
+      reading: null,
     }))
   },
 }
