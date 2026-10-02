@@ -120,16 +120,13 @@ function ExpeditionCard({ expedition }: { expedition: UserExpedition }) {
 
 function DiscoveryCard({ achievement }: { achievement: UserAchievement }) {
   return (
-    <Card compact>
-      <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-accent">
-        Descoberta recente
-      </p>
-      <h2 className="mt-1 font-display text-[19px] font-semibold text-content">
+    <Card compact className="min-h-24 text-center">
+      <div className="mx-auto flex size-8 items-center justify-center rounded-full bg-surface-muted text-accent">
+        <span aria-hidden="true" className="text-sm">✦</span>
+      </div>
+      <h3 className="mt-2 text-[11px] font-bold leading-tight text-content">
         {achievement.achievement.name}
-      </h2>
-      <p className="mt-1 text-[12px] leading-relaxed text-content-muted">
-        {achievement.achievement.description}
-      </p>
+      </h3>
     </Card>
   )
 }
@@ -210,7 +207,7 @@ export function JourneyPage() {
 
   return (
     <div className="space-y-6 px-6 pb-8 pt-6">
-      <header className="space-y-4">
+      <header className="space-y-5">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Avatar
@@ -226,7 +223,12 @@ export function JourneyPage() {
             </div>
           </div>
 
-          <Badge>Nível —</Badge>
+          <div className="rounded-md border border-border bg-surface-elevated px-3 py-2 text-center">
+            <p className="text-[9px] font-bold uppercase tracking-[0.08em] text-content-accent-muted">
+              Nível
+            </p>
+            <p className="font-display text-[17px] font-semibold leading-none text-accent">—</p>
+          </div>
         </div>
 
         <div>
@@ -238,15 +240,11 @@ export function JourneyPage() {
               {(xpBalance?.totalXp ?? 0).toLocaleString('pt-BR')} XP
             </p>
           </div>
-          <div className="mt-2">
-            <Progress value={xpBalance?.totalXp ?? 0} max={Math.max(1, xpBalance?.totalXp ?? 1)} />
+          <div className="mt-2 h-1.5 overflow-hidden rounded-pill bg-surface-muted">
+            <div className="h-full w-[68%] rounded-pill bg-accent" />
           </div>
         </div>
       </header>
-
-      <EloraMessage>
-        Já experimentou ler ao ar livre? Muda completamente a experiência!
-      </EloraMessage>
 
       {activeReading ? (
         <ActiveReadingCard userBook={activeReading} />
@@ -259,14 +257,7 @@ export function JourneyPage() {
           <p className="mt-2 text-[13px] leading-relaxed text-content-muted">
             Explore o catálogo ou escolha um livro da sua biblioteca para iniciar sua próxima aventura.
           </p>
-          <div className="mt-4 flex gap-3">
-            <Button className="flex-1" onClick={() => navigate('/explorar')}>
-              Explorar livros
-            </Button>
-            <Button variant="secondary" className="flex-1" onClick={() => navigate('/biblioteca')}>
-              Biblioteca
-            </Button>
-          </div>
+
         </Card>
       )}
 
@@ -283,14 +274,17 @@ export function JourneyPage() {
             </div>
           </div>
 
-          <div className="space-y-3">
-            {recentDiscoveries.map((achievement) => (
+          <div className="grid grid-cols-3 gap-3">
+            {recentDiscoveries.slice(0, 3).map((achievement) => (
               <DiscoveryCard key={achievement.id} achievement={achievement} />
             ))}
           </div>
         </section>
       ) : null}
 
+      <EloraMessage tip>
+        Já experimentou ler ao ar livre? Muda completamente a experiência!
+      </EloraMessage>
     </div>
   )
 }
