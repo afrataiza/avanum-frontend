@@ -235,7 +235,7 @@ export function JourneyPage() {
               Nível {xpBalance?.level ?? 1}
             </p>
             <p className="font-display text-[17px] font-semibold leading-none text-accent">
-              {xpBalance?.levelName ?? 'Iniciante'}
+              {xpBalance?.levelName ?? 'Aprendiz'}
             </p>
           </div>
         </div>
