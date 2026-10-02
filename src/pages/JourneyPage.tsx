@@ -232,9 +232,11 @@ export function JourneyPage() {
 
           <div className="rounded-md border border-border bg-surface-elevated px-3 py-2 text-center">
             <p className="text-[9px] font-bold uppercase tracking-[0.08em] text-content-accent-muted">
-              Nível
+              Nível {xpBalance?.level ?? 1}
             </p>
-            <p className="font-display text-[17px] font-semibold leading-none text-accent">—</p>
+            <p className="font-display text-[17px] font-semibold leading-none text-accent">
+              {xpBalance?.levelName ?? 'Iniciante'}
+            </p>
           </div>
         </div>
 
@@ -248,7 +250,10 @@ export function JourneyPage() {
             </p>
           </div>
           <div className="mt-2 h-1.5 overflow-hidden rounded-pill bg-surface-muted" aria-hidden="true">
-            <div className="h-full w-0 rounded-pill bg-accent" />
+            <div
+              className="h-full rounded-pill bg-accent"
+              style={{ width: `${xpBalance?.levelProgress ?? 0}%` }}
+            />
           </div>
         </div>
       </header>
