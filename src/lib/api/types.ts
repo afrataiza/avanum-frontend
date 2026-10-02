@@ -29,6 +29,7 @@ export type UserBook = {
   book: Book
   createdAt: string | null
   updatedAt: string | null
+  reading: Reading | null
 }
 
 export type XPBalance = {
