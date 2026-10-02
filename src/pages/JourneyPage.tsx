@@ -215,18 +215,11 @@ export function JourneyPage() {
           </h1>
         </div>
 
-        <button
-          type="button"
-          className="focus-ring rounded-avatar"
-          onClick={() => navigate('/perfil')}
-          aria-label="Abrir perfil"
-        >
-          <Avatar
-            src={user?.user_metadata?.avatar_url}
-            alt=""
-            size="user"
-          />
-        </button>
+        <Avatar
+          src={user?.user_metadata?.avatar_url}
+          alt=""
+          size="user"
+        />
       </header>
 
       <EloraMessage>
