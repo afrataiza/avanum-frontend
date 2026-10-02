@@ -6,7 +6,8 @@ import type { UserAchievement, UserBook, UserExpedition, XPBalance } from '@/lib
 import { Avatar, Badge, Button, Card, EloraMessage, FeedbackState, Progress } from '@/components/ui'
 
 function getFirstName(user: ReturnType<typeof useAuth>['user']) {
-  const name = user?.user_metadata?.full_name ?? user?.user_metadata?.name ?? user?.email ?? 'Leitor'
+  const name =
+    user?.user_metadata?.full_name ?? user?.user_metadata?.name ?? user?.email ?? 'Leitor'
   return name.trim().split(/\s+/)[0] || 'Leitor'
 }
 
@@ -42,18 +43,14 @@ function ActiveReadingCard({ userBook }: { userBook: UserBook }) {
 
   if (!reading) return null
 
-  const percentage = reading.totalUnits > 0 ? (reading.currentUnits / reading.totalUnits) * 100 : 0
+  //const percentage = reading.totalUnits > 0 ? (reading.currentUnits / reading.totalUnits) * 100 : 0
 
   return (
     <Card>
       <div className="flex gap-4">
-        <div className="h-28 w-20 shrink-0 overflow-hidden rounded-md bg-surface-muted">
+        <div className="h-28 w-20 shrink-0 overflow-hidden bg-surface-muted">
           {userBook.book.coverUrl ? (
-            <img
-              src={userBook.book.coverUrl}
-              alt=""
-              className="h-full w-full object-cover"
-            />
+            <img src={userBook.book.coverUrl} alt="" className="h-full w-full object-cover" />
           ) : (
             <div className="flex h-full items-center justify-center px-2 text-center font-display text-sm text-content-muted">
               Sem capa
@@ -128,7 +125,12 @@ function DiscoveryCard({ achievement }: { achievement: UserAchievement }) {
       <div className="mx-auto flex size-8 items-center justify-center rounded-full bg-surface-muted text-accent">
         <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4">
           <circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-          <path d="m14.8 9.2-2.1 4.2-4.2 2.1 2.1-4.2 4.2-2.1Z" fill="none" stroke="currentColor" strokeWidth="1.5" />
+          <path
+            d="m14.8 9.2-2.1 4.2-4.2 2.1 2.1-4.2 4.2-2.1Z"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
         </svg>
       </div>
       <h3 className="mt-2 text-[11px] font-bold leading-tight text-content">
@@ -140,7 +142,7 @@ function DiscoveryCard({ achievement }: { achievement: UserAchievement }) {
 
 export function JourneyPage() {
   const { user } = useAuth()
-  const navigate = useNavigate()
+  //const navigate = useNavigate()
   const [library, setLibrary] = useState<UserBook[]>([])
   const [expeditions, setExpeditions] = useState<UserExpedition[]>([])
   const [achievements, setAchievements] = useState<UserAchievement[]>([])
@@ -177,7 +179,10 @@ export function JourneyPage() {
   }, [])
 
   const activeReading = useMemo(
-    () => library.find((item) => item.reading?.status === 'reading' || item.reading?.status === 'paused'),
+    () =>
+      library.find(
+        (item) => item.reading?.status === 'reading' || item.reading?.status === 'paused',
+      ),
     [library],
   )
 
@@ -187,10 +192,7 @@ export function JourneyPage() {
   )
 
   const recentDiscoveries = useMemo(
-    () =>
-      [...achievements]
-        .sort((a, b) => b.achievedAt.localeCompare(a.achievedAt))
-        .slice(0, 2),
+    () => [...achievements].sort((a, b) => b.achievedAt.localeCompare(a.achievedAt)).slice(0, 2),
     [achievements],
   )
 
@@ -202,11 +204,7 @@ export function JourneyPage() {
         <FeedbackState
           title="Não conseguimos carregar sua jornada"
           description="Tente novamente em alguns instantes."
-          action={
-            <Button onClick={() => window.location.reload()}>
-              Tentar novamente
-            </Button>
-          }
+          action={<Button onClick={() => window.location.reload()}>Tentar novamente</Button>}
         />
       </div>
     )
@@ -217,13 +215,9 @@ export function JourneyPage() {
       <header className="space-y-5">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <Avatar
-              src={user?.user_metadata?.avatar_url}
-              alt=""
-              size="user"
-            />
+            <Avatar src={user?.user_metadata?.avatar_url} alt="" size="user" />
             <div>
-              <p className="text-[13px] text-content-muted">Boa noite,</p>
+              <p className="text-[13px] text-content-muted">Olá,</p>
               <h1 className="font-display text-[22px] font-semibold leading-none text-content">
                 {getFirstName(user)}
               </h1>
@@ -231,11 +225,8 @@ export function JourneyPage() {
           </div>
 
           <div className="rounded-md border border-border bg-surface-elevated px-3 py-2 text-center">
-            <p className="text-[9px] font-bold uppercase tracking-[0.08em] text-content-accent-muted">
+            <p className="text-[9px] font-bold uppercase tracking-[0.08em] text-accent">
               Nível {xpBalance?.level ?? 1}
-            </p>
-            <p className="font-display text-[17px] font-semibold leading-none text-accent">
-              {xpBalance?.levelName ?? 'Aprendiz'}
             </p>
           </div>
         </div>
@@ -243,13 +234,17 @@ export function JourneyPage() {
         <div>
           <div className="flex items-center justify-between gap-4">
             <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-content-accent-muted">
-              Exploradora
+              {xpBalance?.levelName ?? 'Aprendiz'}
             </p>
             <p className="text-[12px] font-bold text-accent">
-              {(xpBalance?.totalXp ?? 0).toLocaleString('pt-BR')} XP
+              {(xpBalance?.totalXp ?? 0).toLocaleString('pt-BR')}/
+              {(xpBalance?.levelXpRequired ?? 0).toLocaleString('pt-BR')} XP
             </p>
           </div>
-          <div className="mt-2 h-1.5 overflow-hidden rounded-pill bg-surface-muted" aria-hidden="true">
+          <div
+            className="mt-2 h-1.5 overflow-hidden rounded-pill bg-surface-muted"
+            aria-hidden="true"
+          >
             <div
               className="h-full rounded-pill bg-accent"
               style={{ width: `${xpBalance?.levelProgress ?? 0}%` }}
@@ -264,14 +259,14 @@ export function JourneyPage() {
           <ActiveReadingCard userBook={activeReading} />
         ) : (
           <Card>
-          <p className="text-[11px] font-bold uppercase tracking-wide text-accent">Sua jornada</p>
-          <h2 className="mt-1 font-display text-[22px] font-semibold text-content">
-            Pronto para começar uma nova leitura?
-          </h2>
-          <p className="mt-2 text-[13px] leading-relaxed text-content-muted">
-            Explore o catálogo ou escolha um livro da sua biblioteca para iniciar sua próxima aventura.
-          </p>
-
+            <p className="text-[11px] font-bold uppercase tracking-wide text-accent">Sua jornada</p>
+            <h2 className="mt-1 font-display text-[22px] font-semibold text-content">
+              Pronto para começar uma nova leitura?
+            </h2>
+            <p className="mt-2 text-[13px] leading-relaxed text-content-muted">
+              Explore o catálogo ou escolha um livro da sua biblioteca para iniciar sua próxima
+              aventura.
+            </p>
           </Card>
         )}
       </section>
