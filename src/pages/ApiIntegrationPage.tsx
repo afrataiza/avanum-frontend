@@ -36,12 +36,8 @@ export function ApiIntegrationPage() {
   return (
     <main className="screen-padding py-8">
       <div className="mx-auto w-full max-w-2xl">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
-          ATSA-27
-        </p>
-        <h1 className="mt-2 font-display text-3xl text-content">
-          Integração com o backend
-        </h1>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">ATSA-27</p>
+        <h1 className="mt-2 font-display text-3xl text-content">Integração com o backend</h1>
         <p className="mt-2 text-sm leading-6 text-content-muted">
           Tela técnica temporária para validar o cliente de API com o backend real.
         </p>
@@ -54,9 +50,7 @@ export function ApiIntegrationPage() {
             />
           )}
 
-          {!isLoading && error && (
-            <FeedbackState title="Falha na integração" description={error} />
-          )}
+          {!isLoading && error && <FeedbackState title="Falha na integração" description={error} />}
 
           {!isLoading && !error && (
             <div className="space-y-3">
@@ -65,25 +59,16 @@ export function ApiIntegrationPage() {
               </p>
 
               {books.map((book) => (
-                <div
-                  key={book.id}
-                  className="rounded-md border border-border bg-surface-muted p-4"
-                >
+                <div key={book.id} className="rounded-md border border-border bg-surface-muted p-4">
                   <p className="font-display text-xl text-content">{book.title}</p>
-                  <p className="mt-1 text-sm text-content-muted">
-                    {book.authors.join(', ')}
-                  </p>
+                  <p className="mt-1 text-sm text-content-muted">{book.authors.join(', ')}</p>
                 </div>
               ))}
             </div>
           )}
         </Card>
 
-        <Button
-          variant="secondary"
-          className="mt-6"
-          onClick={() => window.location.reload()}
-        >
+        <Button variant="secondary" className="mt-6" onClick={() => window.location.reload()}>
           Reexecutar consulta
         </Button>
       </div>

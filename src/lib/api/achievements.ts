@@ -39,8 +39,8 @@ const toUserAchievement = (item: BackendUserAchievement): UserAchievement => ({
 
 export const achievementsApi = {
   list() {
-    return apiRequest<{ achievements: BackendAchievement[] }>('achievements').then(
-      (result) => result.achievements.map(toAchievement),
+    return apiRequest<{ achievements: BackendAchievement[] }>('achievements').then((result) =>
+      result.achievements.map(toAchievement),
     )
   },
 

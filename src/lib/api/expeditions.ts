@@ -64,8 +64,8 @@ const toUserExpedition = (item: BackendUserExpedition): UserExpedition => ({
 
 export const expeditionsApi = {
   listMine() {
-    return apiRequest<{ expeditions: BackendUserExpedition[] }>('expeditions').then(
-      (result) => result.expeditions.map(toUserExpedition),
+    return apiRequest<{ expeditions: BackendUserExpedition[] }>('expeditions').then((result) =>
+      result.expeditions.map(toUserExpedition),
     )
   },
 

@@ -31,10 +31,7 @@ async function getAccessToken() {
   return data.session?.access_token ?? null
 }
 
-export async function apiRequest<T>(
-  endpoint: string,
-  options: RequestOptions = {},
-): Promise<T> {
+export async function apiRequest<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
   const { method = 'GET', query, body, authenticated = true } = options
   const url = new URL(`${functionsBaseUrl}/${endpoint}`)
 

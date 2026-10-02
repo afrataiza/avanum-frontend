@@ -1,9 +1,6 @@
 export type ReadingFormat = 'physical' | 'ebook' | 'audiobook'
 export type ReadingStatus = 'reading' | 'paused' | 'abandoned' | 'completed'
-export type ExpeditionObjectiveType =
-  | 'books_completed'
-  | 'pages_read'
-  | 'minutes_listened'
+export type ExpeditionObjectiveType = 'books_completed' | 'pages_read' | 'minutes_listened'
 export type ExpeditionStatus = 'active' | 'completed' | 'cancelled'
 export type MapNodeStatus = 'locked' | 'discovered' | 'explored'
 

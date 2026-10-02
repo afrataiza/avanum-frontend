@@ -45,16 +45,14 @@ type BackendUserBook = {
 export const libraryApi = {
   list() {
     return apiRequest<{ items: BackendUserBook[] }>('user-library').then((result) =>
-      result.items.map(
-        (item): UserBook => ({
-          id: item.id,
-          status: item.status,
-          bookId: item.book.id,
-          book: toBook(item.book),
-          createdAt: item.created_at,
-          updatedAt: item.updated_at,
-        }),
-      ),
+      result.items.map((item): UserBook => ({
+        id: item.id,
+        status: item.status,
+        bookId: item.book.id,
+        book: toBook(item.book),
+        createdAt: item.created_at,
+        updatedAt: item.updated_at,
+      })),
     )
   },
 
@@ -62,15 +60,13 @@ export const libraryApi = {
     return apiRequest<BackendAddToLibraryResponse>('add-to-library', {
       method: 'POST',
       body: { book },
-    }).then(
-      (result): UserBook => ({
-        id: result.id,
-        status: result.status,
-        bookId: result.book.id,
-        book: toBook(result.book),
-        createdAt: null,
-        updatedAt: null,
-      }),
-    )
+    }).then((result): UserBook => ({
+      id: result.id,
+      status: result.status,
+      bookId: result.book.id,
+      book: toBook(result.book),
+      createdAt: null,
+      updatedAt: null,
+    }))
   },
 }
