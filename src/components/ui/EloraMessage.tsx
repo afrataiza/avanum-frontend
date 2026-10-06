@@ -16,7 +16,7 @@ export function EloraMessage({ children, avatarSrc, tip = false }: EloraMessageP
       ].join(' ')}
     >
       <div className="flex items-start gap-3">
-        {avatarSrc ? <Avatar src={avatarSrc} size="elora" alt="" /> : null}
+        <Avatar src={avatarSrc ?? '/elora-avatar.png'} size="elora" alt="Elora" />
 
         <div className="min-w-0">
           <p className="text-[11px] font-bold uppercase tracking-wide text-accent">Elora</p>

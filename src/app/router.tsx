@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { ProtectedRoute } from '@/components/auth'
 import { ApiIntegrationPage } from '@/pages/ApiIntegrationPage'
-import { OnboardingRoute, ProtectedScreen } from './RouteScreens'
+import { JourneyRoute, OnboardingRoute, ProtectedScreen } from './RouteScreens'
 import { SignInPage } from '@/pages/SignInPage'
 
 export const router = createBrowserRouter([
@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/',
-        element: <ProtectedScreen />,
+        element: <JourneyRoute />,
       },
       {
         path: 'explorar',

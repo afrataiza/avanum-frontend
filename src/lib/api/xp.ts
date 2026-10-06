@@ -4,6 +4,11 @@ import type { XPBalance, XPTransaction } from './types'
 type BackendXPBalance = {
   user_id: string
   total_xp: number
+  level: number
+  level_name: string
+  level_xp: number
+  level_xp_required: number
+  level_progress: number
   created_at?: string
   updated_at?: string
 }
@@ -27,6 +32,11 @@ export const xpApi = {
       balance: {
         userId: result.balance.user_id,
         totalXp: result.balance.total_xp,
+        level: result.balance.level,
+        levelName: result.balance.level_name,
+        levelXp: result.balance.level_xp,
+        levelXpRequired: result.balance.level_xp_required,
+        levelProgress: result.balance.level_progress,
         createdAt: result.balance.created_at ?? null,
         updatedAt: result.balance.updated_at ?? null,
       },
