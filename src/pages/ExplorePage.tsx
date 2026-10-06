@@ -365,14 +365,12 @@ export function BookDetailsPage() {
           Voltar
         </button>
 
-        <button
-          type="button"
-          aria-label="Salvar livro"
-          className="focus-ring rounded-md p-2 text-content-muted"
-          onClick={() => undefined}
+        <span
+          aria-hidden="true"
+          className="rounded-md p-2 text-content-muted"
         >
           <BookmarkIcon />
-        </button>
+        </span>
       </header>
 
       <article className="mt-7">
