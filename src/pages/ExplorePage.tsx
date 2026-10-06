@@ -9,7 +9,11 @@ import { Button, Card, FeedbackState, Input } from '@/components/ui'
 
 function SearchIcon() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[2]">
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-5 w-5 fill-none stroke-current stroke-[2]"
+    >
       <circle cx="11" cy="11" r="6.5" />
       <path d="m16 16 4 4" strokeLinecap="round" />
     </svg>
@@ -18,7 +22,11 @@ function SearchIcon() {
 
 function PlusIcon() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-[2]">
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-4 w-4 fill-none stroke-current stroke-[2]"
+    >
       <path d="M12 7v10M7 12h10" strokeLinecap="round" />
     </svg>
   )
@@ -26,7 +34,11 @@ function PlusIcon() {
 
 function BackIcon() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[2]">
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-5 w-5 fill-none stroke-current stroke-[2]"
+    >
       <path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
@@ -34,8 +46,15 @@ function BackIcon() {
 
 function BookmarkIcon() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[1.8]">
-      <path d="M6.5 4.5A1.5 1.5 0 0 1 8 3h8a1.5 1.5 0 0 1 1.5 1.5V21l-5.5-3-5.5 3V4.5Z" strokeLinejoin="round" />
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-5 w-5 fill-none stroke-current stroke-[1.8]"
+    >
+      <path
+        d="M6.5 4.5A1.5 1.5 0 0 1 8 3h8a1.5 1.5 0 0 1 1.5 1.5V21l-5.5-3-5.5 3V4.5Z"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }
@@ -81,7 +100,9 @@ function BookResultCard({
       onClick={onOpen}
       className="focus-ring block w-full text-left"
     >
-      <Card className="flex min-h-24 items-center gap-4 rounded-lg p-3 transition-opacity hover:opacity-90">
+      <Card
+        className="flex min-h-24 items-center gap-4 rounded-lg p-3 transition-opacity hover:opacity-90"
+      >
         <BookCover book={book} className="h-[72px] w-[50px]" />
 
         <div className="min-w-0 flex-1">
