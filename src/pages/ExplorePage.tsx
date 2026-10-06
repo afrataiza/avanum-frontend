@@ -77,7 +77,9 @@ function BookCover({
           className="h-full w-full object-cover"
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center p-2 text-center text-[10px] text-content-muted">
+        <div
+          className="flex h-full w-full items-center justify-center p-2 text-center text-[10px] text-content-muted"
+        >
           Sem capa
         </div>
       )}
@@ -425,7 +427,9 @@ export function BookDetailsPage() {
           ) : null}
 
           {book.publicationYear ? (
-            <div className="flex min-h-8 items-center justify-center gap-1 rounded-md border border-border bg-surface-elevated px-2 text-[11px] font-semibold text-content">
+            <div
+              className="flex min-h-8 items-center justify-center gap-1 rounded-md border border-border bg-surface-elevated px-2 text-[11px] font-semibold text-content"
+            >
               {book.publicationYear}
             </div>
           ) : null}
