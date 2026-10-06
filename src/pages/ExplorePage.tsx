@@ -106,14 +106,18 @@ function BookResultCard({
         <BookCover book={book} className="h-[72px] w-[50px]" />
 
         <div className="min-w-0 flex-1">
-          <h3 className="line-clamp-2 font-display text-[17px] font-semibold leading-[1.05] text-content">
+          <h3
+            className="line-clamp-2 font-display text-[17px] font-semibold leading-[1.05] text-content"
+          >
             {book.title}
           </h3>
           <p className="mt-1 text-[13px] leading-4 text-content-muted">
             {book.authors.length ? book.authors.join(', ') : 'Autor desconhecido'}
           </p>
           {category ? (
-            <span className="mt-2 inline-flex rounded-sm bg-surface-muted px-2 py-1 text-[10px] font-medium text-content-accent-muted">
+            <span
+              className="mt-2 inline-flex rounded-sm bg-surface-muted px-2 py-1 text-[10px] font-medium text-content-accent-muted"
+            >
               {category}
             </span>
           ) : null}
@@ -199,7 +203,9 @@ export function ExplorePage() {
         </label>
 
         <div className="relative">
-          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-accent">
+          <span
+            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-accent"
+          >
             <SearchIcon />
           </span>
 
@@ -398,7 +404,9 @@ export function BookDetailsPage() {
         <div className="flex flex-col items-center text-center">
           <BookCover book={book} className="h-[140px] w-[100px] rounded-lg" />
 
-          <h1 className="mt-5 max-w-[330px] font-display text-[28px] font-semibold leading-[1.02] text-content">
+          <h1
+            className="mt-5 max-w-[330px] font-display text-[28px] font-semibold leading-[1.02] text-content"
+          >
             {book.title}
           </h1>
 
@@ -409,7 +417,9 @@ export function BookDetailsPage() {
 
         <div className="mt-8 grid grid-cols-3 gap-2">
           {category ? (
-            <div className="flex min-h-8 items-center justify-center gap-1 rounded-md border border-border bg-surface-elevated px-2 text-[11px] font-semibold text-content">
+            <div
+              className="flex min-h-8 items-center justify-center gap-1 rounded-md border border-border bg-surface-elevated px-2 text-[11px] font-semibold text-content"
+            >
               {category}
             </div>
           ) : null}
