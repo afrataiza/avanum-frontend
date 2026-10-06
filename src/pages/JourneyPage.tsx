@@ -43,8 +43,6 @@ function ActiveReadingCard({ userBook }: { userBook: UserBook }) {
 
   if (!reading) return null
 
-  //const percentage = reading.totalUnits > 0 ? (reading.currentUnits / reading.totalUnits) * 100 : 0
-
   return (
     <Card>
       <div className="flex gap-4">
@@ -78,7 +76,7 @@ function ActiveReadingCard({ userBook }: { userBook: UserBook }) {
       <Button
         fullWidth
         className="mt-4"
-        onClick={() => navigate('/biblioteca')}
+        onClick={() => navigate('/leitura')}
         aria-label={'Continuar leitura de ' + userBook.book.title}
       >
         Continuar leitura
@@ -142,7 +140,6 @@ function DiscoveryCard({ achievement }: { achievement: UserAchievement }) {
 
 export function JourneyPage() {
   const { user } = useAuth()
-  //const navigate = useNavigate()
   const [library, setLibrary] = useState<UserBook[]>([])
   const [expeditions, setExpeditions] = useState<UserExpedition[]>([])
   const [achievements, setAchievements] = useState<UserAchievement[]>([])
