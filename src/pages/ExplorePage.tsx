@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { catalogApi } from '@/lib/api/catalog'
+import { libraryApi } from '@/lib/api/library'
 import { ApiError } from '@/lib/api/client'
-import type { Book } from '@/lib/api/types'
+import type { AddToLibraryInput, Book } from '@/lib/api/types'
 import { Button, Card, FeedbackState, Input } from '@/components/ui'
 
 function BookCover({ book, compact = false }: { book: Book; compact?: boolean }) {
@@ -200,6 +201,8 @@ export function BookDetailsPage() {
   const id = searchParams.get('id')
   const [book, setBook] = useState<Book | null>(null)
   const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'empty'>('loading')
+  const [libraryStatus, setLibraryStatus] = useState<'idle' | 'adding' | 'added' | 'error'>('idle')
+  const [libraryError, setLibraryError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!id) {
@@ -224,6 +227,32 @@ export function BookDetailsPage() {
       active = false
     }
   }, [id])
+
+  const addToLibrary = async () => {
+    setLibraryStatus('adding')
+    setLibraryError(null)
+
+    const payload: AddToLibraryInput = {
+      externalId: book.id,
+      title: book.title,
+      authors: book.authors,
+      synopsis: book.synopsis,
+      coverUrl: book.coverUrl,
+      publicationYear: book.publicationYear,
+      categories: book.categories,
+      language: book.language,
+      isbn10: book.isbn10,
+      isbn13: book.isbn13,
+    }
+
+    try {
+      await libraryApi.add(payload)
+      setLibraryStatus('added')
+    } catch (cause) {
+      setLibraryStatus('error')
+      setLibraryError(cause instanceof ApiError ? cause.message : 'Não foi possível adicionar o livro à biblioteca.')
+    }
+  }
 
   if (status === 'loading') {
     return <div className="screen-padding py-8"><div className="h-96 animate-pulse rounded-lg bg-surface-elevated" /></div>
@@ -287,9 +316,20 @@ export function BookDetailsPage() {
         ) : null}
 
         <div className="mt-8">
-          <Button fullWidth onClick={() => navigate('/biblioteca')}>
-            Adicionar à biblioteca
-          </Button>
+          {libraryStatus === 'added' ? (
+            <Button fullWidth variant="secondary" onClick={() => navigate('/biblioteca')}>
+              Na biblioteca
+            </Button>
+          ) : (
+            <Button fullWidth disabled={libraryStatus === 'adding'} onClick={() => void addToLibrary()}>
+              {libraryStatus === 'adding' ? 'Adicionando...' : 'Adicionar à biblioteca'}
+            </Button>
+          )}
+          {libraryStatus === 'error' ? (
+            <p role="alert" className="mt-2 text-center text-xs text-content-muted">
+              {libraryError}
+            </p>
+          ) : null}
         </div>
       </article>
     </div>
