@@ -44,6 +44,17 @@ function BackIcon() {
   )
 }
 
+const resultCardClass =
+  'flex min-h-24 items-center gap-4 rounded-lg p-3 transition-opacity hover:opacity-90'
+const resultTitleClass =
+  'line-clamp-2 font-display text-[17px] font-semibold leading-[1.05] text-content'
+const resultCategoryClass =
+  'mt-2 inline-flex rounded-sm bg-surface-muted px-2 py-1 text-[10px] font-medium text-content-accent-muted'
+const resultPlusClass =
+  'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent text-accent'
+const metadataChipClass =
+  'flex min-h-8 items-center justify-center gap-1 rounded-md border border-border bg-surface-elevated px-2 text-[11px] font-semibold text-content'
+
 function BookmarkIcon() {
   return (
     <svg
@@ -103,17 +114,13 @@ function BookResultCard({
       className="focus-ring block w-full text-left"
     >
       <Card
-        className={[
-          'flex min-h-24 items-center gap-4 rounded-lg p-3 transition-opacity hover:opacity-90',
-        ].join(' ')}
+        className={resultCardClass}
       >
         <BookCover book={book} className="h-[72px] w-[50px]" />
 
         <div className="min-w-0 flex-1">
           <h3
-            className={[
-              'line-clamp-2 font-display text-[17px] font-semibold leading-[1.05] text-content',
-            ].join(' ')}
+            className={resultTitleClass}
           >
             {book.title}
           </h3>
@@ -122,9 +129,7 @@ function BookResultCard({
           </p>
           {category ? (
             <span
-              className={[
-                'mt-2 inline-flex rounded-sm bg-surface-muted px-2 py-1 text-[10px] font-medium text-content-accent-muted',
-              ].join(' ')}
+              className={resultCategoryClass}
             >
               {category}
             </span>
@@ -133,9 +138,7 @@ function BookResultCard({
 
         <span
           aria-hidden="true"
-          className={[
-            'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent text-accent',
-          ].join(' ')}
+          className={resultPlusClass}
         >
           <PlusIcon />
         </span>
@@ -417,9 +420,7 @@ export function BookDetailsPage() {
           <BookCover book={book} className="h-[140px] w-[100px] rounded-lg" />
 
           <h1
-            className={[
-              'mt-5 max-w-[330px] font-display text-[28px] font-semibold leading-[1.02] text-content',
-            ].join(' ')}
+            className="mt-5 max-w-[330px] font-display text-[28px] font-semibold leading-[1.02] text-content"
           >
             {book.title}
           </h1>
@@ -432,9 +433,7 @@ export function BookDetailsPage() {
         <div className="mt-8 grid grid-cols-3 gap-2">
           {category ? (
             <div
-              className={[
-                'flex min-h-8 items-center justify-center gap-1 rounded-md border border-border bg-surface-elevated px-2 text-[11px] font-semibold text-content',
-              ].join(' ')}
+              className={metadataChipClass}
             >
               {category}
             </div>
@@ -450,9 +449,7 @@ export function BookDetailsPage() {
 
           {book.language ? (
             <div
-              className={[
-                'flex min-h-8 items-center justify-center gap-1 rounded-md border border-border bg-surface-elevated px-2 text-[11px] font-semibold text-content',
-              ].join(' ')}
+              className={metadataChipClass}
             >
               {book.language}
             </div>
