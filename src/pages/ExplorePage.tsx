@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import type { FormEvent } from 'react'
 import { catalogApi } from '@/lib/api/catalog'
 import { libraryApi } from '@/lib/api/library'
 import { ApiError } from '@/lib/api/client'
@@ -87,7 +88,7 @@ export function ExplorePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const submit = (event: React.FormEvent<HTMLFormElement>) => {
+  const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     void search(query)
   }
@@ -197,8 +198,7 @@ export function ExplorePage() {
 
 export function BookDetailsPage() {
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const id = searchParams.get('id')
+  const { id } = useParams()
   const [book, setBook] = useState<Book | null>(null)
   const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'empty'>('loading')
   const [libraryStatus, setLibraryStatus] = useState<'idle' | 'adding' | 'added' | 'error'>('idle')
@@ -304,7 +304,7 @@ export function BookDetailsPage() {
           </section>
         ) : null}
 
-        {(book.categories.length || book.language || book.isbn10 || book.isbn13) ? (
+        {(book.language || book.isbn10 || book.isbn13) ? (
           <section className="mt-8">
             <h2 className="font-display text-[22px] font-semibold text-content">Informações</h2>
             <dl className="mt-3 space-y-2 text-sm">
