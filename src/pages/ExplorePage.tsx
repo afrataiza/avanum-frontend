@@ -7,13 +7,58 @@ import { ApiError } from '@/lib/api/client'
 import type { AddToLibraryInput, Book } from '@/lib/api/types'
 import { Button, Card, FeedbackState, Input } from '@/components/ui'
 
-function BookCover({ book, compact = false }: { book: Book; compact?: boolean }) {
+function SearchIcon() {
   return (
-    <div className={compact ? 'h-28 w-20 shrink-0 overflow-hidden bg-surface-muted' : 'aspect-[2/3] w-full overflow-hidden bg-surface-muted'}>
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[2]">
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="m16 16 4 4" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function PlusIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-[2]">
+      <path d="M12 7v10M7 12h10" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function BackIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[2]">
+      <path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function BookmarkIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[1.8]">
+      <path d="M6.5 4.5A1.5 1.5 0 0 1 8 3h8a1.5 1.5 0 0 1 1.5 1.5V21l-5.5-3-5.5 3V4.5Z" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function BookCover({
+  book,
+  className = '',
+  alt,
+}: {
+  book: Book
+  className?: string
+  alt?: string
+}) {
+  return (
+    <div className={`shrink-0 overflow-hidden bg-surface-muted ${className}`}>
       {book.coverUrl ? (
-        <img src={book.coverUrl} alt={`Capa de ${book.title}`} className="h-full w-full object-cover" />
+        <img
+          src={book.coverUrl}
+          alt={alt ?? `Capa de ${book.title}`}
+          className="h-full w-full object-cover"
+        />
       ) : (
-        <div className="flex h-full w-full items-center justify-center p-3 text-center text-xs text-content-muted">
+        <div className="flex h-full w-full items-center justify-center p-2 text-center text-[10px] text-content-muted">
           Sem capa
         </div>
       )}
@@ -21,20 +66,46 @@ function BookCover({ book, compact = false }: { book: Book; compact?: boolean })
   )
 }
 
-function SearchIcon() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-2">
-      <circle cx="11" cy="11" r="6" />
-      <path d="m16 16 4 4" strokeLinecap="round" />
-    </svg>
-  )
-}
+function BookResultCard({
+  book,
+  onOpen,
+}: {
+  book: Book
+  onOpen: () => void
+}) {
+  const category = book.categories[0]
 
-function BackIcon() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-2">
-      <path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <button
+      type="button"
+      onClick={onOpen}
+      className="focus-ring block w-full text-left"
+    >
+      <Card className="flex min-h-24 items-center gap-4 rounded-lg p-3 transition-opacity hover:opacity-90">
+        <BookCover book={book} className="h-[72px] w-[50px]" />
+
+        <div className="min-w-0 flex-1">
+          <h3 className="line-clamp-2 font-display text-[17px] font-semibold leading-[1.05] text-content">
+            {book.title}
+          </h3>
+          <p className="mt-1 text-[13px] leading-4 text-content-muted">
+            {book.authors.length ? book.authors.join(', ') : 'Autor desconhecido'}
+          </p>
+          {category ? (
+            <span className="mt-2 inline-flex rounded-sm bg-surface-muted px-2 py-1 text-[10px] font-medium text-content-accent-muted">
+              {category}
+            </span>
+          ) : null}
+        </div>
+
+        <span
+          aria-hidden="true"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent text-accent"
+        >
+          <PlusIcon />
+        </span>
+      </Card>
+    </button>
   )
 }
 
@@ -94,48 +165,51 @@ export function ExplorePage() {
   }
 
   return (
-    <div className="screen-padding pb-8 pt-6">
-      <header className="mb-6">
-        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-accent">Catálogo</p>
-        <h1 className="font-display text-[32px] font-semibold leading-none text-content">Explorar</h1>
-        <p className="mt-2 text-sm leading-5 text-content-muted">
-          Encontre seu próximo livro.
-        </p>
+    <div className="screen-padding pb-8 pt-12">
+      <header>
+        <h1 className="font-display text-[28px] font-semibold leading-none text-content">
+          Explorar Mundo
+        </h1>
       </header>
 
-      <form onSubmit={submit} role="search">
-        <label className="sr-only" htmlFor="book-search">Buscar livros ou autores</label>
+      <form onSubmit={submit} role="search" className="mt-5">
+        <label className="sr-only" htmlFor="book-search">
+          Buscar livros ou autores
+        </label>
+
         <div className="relative">
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-accent">
+            <SearchIcon />
+          </span>
+
           <Input
             id="book-search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar livros ou autores"
-            className="pr-12"
+            placeholder="Buscar livros, autores..."
+            className="pl-11 pr-4"
             autoComplete="off"
           />
-          <button
-            type="submit"
-            aria-label="Buscar"
-            className="focus-ring absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-2 text-accent"
-          >
-            <SearchIcon />
-          </button>
         </div>
       </form>
 
-      <div className="mt-6">
+      <div className="my-5 border-b border-dashed border-content-accent-muted/70" />
+
+      <div>
         {status === 'idle' ? (
           <FeedbackState
-            title="O que você quer descobrir?"
-            description="Pesquise por título, autor ou assunto para encontrar novos livros."
+            title="Descubra sua próxima leitura"
+            description="Pesquise por título ou autor para encontrar novos livros."
           />
         ) : null}
 
         {status === 'loading' ? (
           <div className="space-y-3" aria-live="polite" aria-busy="true">
             {[1, 2, 3].map((item) => (
-              <div key={item} className="h-32 animate-pulse rounded-lg border border-border bg-surface-elevated" />
+              <div
+                key={item}
+                className="h-24 animate-pulse rounded-lg border border-border bg-surface-elevated"
+              />
             ))}
           </div>
         ) : null}
@@ -151,42 +225,34 @@ export function ExplorePage() {
           <FeedbackState
             title="Não foi possível buscar"
             description={error ?? 'Tente novamente em alguns instantes.'}
-            action={<Button variant="secondary" onClick={() => void search(query)}>Tentar novamente</Button>}
+            action={
+              <Button variant="secondary" onClick={() => void search(query)}>
+                Tentar novamente
+              </Button>
+            }
           />
         ) : null}
 
         {status === 'success' ? (
           <section aria-label="Resultados da busca">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="font-display text-[22px] font-semibold text-content">Resultados</h2>
-              <span className="text-xs text-content-muted">{total.toLocaleString('pt-BR')}</span>
+            <div className="mb-4 flex items-end justify-between">
+              <h2 className="font-display text-[22px] font-semibold text-content">
+                Resultados
+              </h2>
+              <span className="text-xs text-content-muted">
+                {total.toLocaleString('pt-BR')}
+              </span>
             </div>
 
             <div className="space-y-3">
               {results.map((book) => (
-                <button
+                <BookResultCard
                   key={book.id}
-                  type="button"
-                  onClick={() => navigate(`/explorar/livro/${encodeURIComponent(book.id)}`)}
-                  className="focus-ring block w-full text-left"
-                >
-                  <Card className="flex gap-4 transition-opacity hover:opacity-90">
-                    <BookCover book={book} compact />
-                    <div className="min-w-0 py-1">
-                      <h3 className="line-clamp-2 font-display text-[20px] font-semibold leading-5 text-content">
-                        {book.title}
-                      </h3>
-                      <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-content-muted">
-                        {book.authors.length ? book.authors.join(', ') : 'Autor desconhecido'}
-                      </p>
-                      {book.publicationYear ? (
-                        <p className="mt-2 text-[11px] font-bold uppercase tracking-wide text-accent">
-                          {book.publicationYear}
-                        </p>
-                      ) : null}
-                    </div>
-                  </Card>
-                </button>
+                  book={book}
+                  onOpen={() =>
+                    navigate(`/explorar/livro/${encodeURIComponent(book.id)}`)
+                  }
+                />
               ))}
             </div>
           </section>
@@ -212,7 +278,8 @@ export function BookDetailsPage() {
 
     let active = true
 
-    catalogApi.getById(id)
+    catalogApi
+      .getById(id)
       .then((result) => {
         if (active) {
           setBook(result)
@@ -229,6 +296,8 @@ export function BookDetailsPage() {
   }, [id])
 
   const addToLibrary = async () => {
+    if (!book) return
+
     setLibraryStatus('adding')
     setLibraryError(null)
 
@@ -250,12 +319,20 @@ export function BookDetailsPage() {
       setLibraryStatus('added')
     } catch (cause) {
       setLibraryStatus('error')
-      setLibraryError(cause instanceof ApiError ? cause.message : 'Não foi possível adicionar o livro à biblioteca.')
+      setLibraryError(
+        cause instanceof ApiError
+          ? cause.message
+          : 'Não foi possível adicionar o livro à biblioteca.',
+      )
     }
   }
 
   if (status === 'loading') {
-    return <div className="screen-padding py-8"><div className="h-96 animate-pulse rounded-lg bg-surface-elevated" /></div>
+    return (
+      <div className="screen-padding py-8">
+        <div className="mx-auto h-64 w-44 animate-pulse rounded-lg bg-surface-elevated" />
+      </div>
+    )
   }
 
   if (status !== 'success' || !book) {
@@ -264,69 +341,107 @@ export function BookDetailsPage() {
         <FeedbackState
           title={status === 'empty' ? 'Livro não encontrado' : 'Não foi possível carregar o livro'}
           description="Volte para a busca e tente novamente."
-          action={<Button variant="secondary" onClick={() => navigate('/explorar')}>Voltar para explorar</Button>}
+          action={
+            <Button variant="secondary" onClick={() => navigate('/explorar')}>
+              Voltar para explorar
+            </Button>
+          }
         />
       </div>
     )
   }
 
+  const category = book.categories[0]
+
   return (
     <div className="screen-padding pb-8 pt-5">
-      <button
-        type="button"
-        onClick={() => navigate(-1)}
-        className="focus-ring mb-6 inline-flex items-center gap-2 rounded-md py-2 text-sm font-semibold text-content-muted"
-      >
-        <BackIcon />
-        Voltar
-      </button>
+      <header className="flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="focus-ring inline-flex items-center gap-1 rounded-md py-2 text-sm font-semibold text-accent"
+        >
+          <BackIcon />
+          Voltar
+        </button>
 
-      <article>
-        <div className="flex gap-5">
-          <BookCover book={book} compact />
-          <div className="min-w-0">
-            <h1 className="font-display text-[28px] font-semibold leading-7 text-content">{book.title}</h1>
-            <p className="mt-2 text-sm leading-5 text-content-muted">
-              {book.authors.length ? book.authors.join(', ') : 'Autor desconhecido'}
-            </p>
-            {book.publicationYear ? (
-              <p className="mt-3 text-[11px] font-bold uppercase tracking-wide text-accent">
-                {book.publicationYear}
-              </p>
-            ) : null}
-          </div>
+        <button
+          type="button"
+          aria-label="Salvar livro"
+          className="focus-ring rounded-md p-2 text-content-muted"
+          onClick={() => undefined}
+        >
+          <BookmarkIcon />
+        </button>
+      </header>
+
+      <article className="mt-7">
+        <div className="flex flex-col items-center text-center">
+          <BookCover book={book} className="h-[140px] w-[100px] rounded-lg" />
+
+          <h1 className="mt-5 max-w-[330px] font-display text-[28px] font-semibold leading-[1.02] text-content">
+            {book.title}
+          </h1>
+
+          <p className="mt-2 text-[15px] text-content-muted">
+            {book.authors.length ? book.authors.join(', ') : 'Autor desconhecido'}
+          </p>
+        </div>
+
+        <div className="mt-8 grid grid-cols-3 gap-2">
+          {category ? (
+            <div className="flex min-h-8 items-center justify-center gap-1 rounded-md border border-border bg-surface-elevated px-2 text-[11px] font-semibold text-content">
+              {category}
+            </div>
+          ) : null}
+
+          {book.publicationYear ? (
+            <div className="flex min-h-8 items-center justify-center gap-1 rounded-md border border-border bg-surface-elevated px-2 text-[11px] font-semibold text-content">
+              {book.publicationYear}
+            </div>
+          ) : null}
+
+          {book.language ? (
+            <div className="flex min-h-8 items-center justify-center gap-1 rounded-md border border-border bg-surface-elevated px-2 text-[11px] font-semibold text-content">
+              {book.language}
+            </div>
+          ) : null}
         </div>
 
         {book.synopsis ? (
-          <section className="mt-8">
-            <h2 className="font-display text-[22px] font-semibold text-content">Sinopse</h2>
-            <p className="mt-3 text-sm leading-6 text-content-muted">{book.synopsis}</p>
+          <section className="mt-7">
+            <h2 className="font-display text-[20px] font-semibold text-content">
+              Sinopse
+            </h2>
+            <p className="mt-3 text-[13px] leading-[1.65] text-content">
+              {book.synopsis}
+            </p>
           </section>
         ) : null}
 
-        {(book.language || book.isbn10 || book.isbn13) ? (
-          <section className="mt-8">
-            <h2 className="font-display text-[22px] font-semibold text-content">Informações</h2>
-            <dl className="mt-3 space-y-2 text-sm">
-              {book.language ? <div className="flex justify-between gap-4 border-b border-border py-2"><dt className="text-content-muted">Idioma</dt><dd>{book.language}</dd></div> : null}
-              {book.isbn13 ? <div className="flex justify-between gap-4 border-b border-border py-2"><dt className="text-content-muted">ISBN-13</dt><dd>{book.isbn13}</dd></div> : null}
-              {book.isbn10 ? <div className="flex justify-between gap-4 border-b border-border py-2"><dt className="text-content-muted">ISBN-10</dt><dd>{book.isbn10}</dd></div> : null}
-            </dl>
-          </section>
-        ) : null}
+        <div className="my-5 border-b border-dashed border-content-accent-muted/70" />
 
-        <div className="mt-8">
+        <div className="space-y-3">
           {libraryStatus === 'added' ? (
-            <Button fullWidth variant="secondary" onClick={() => navigate('/biblioteca')}>
+            <Button
+              fullWidth
+              variant="secondary"
+              onClick={() => navigate('/biblioteca')}
+            >
               Na biblioteca
             </Button>
           ) : (
-            <Button fullWidth disabled={libraryStatus === 'adding'} onClick={() => void addToLibrary()}>
-              {libraryStatus === 'adding' ? 'Adicionando...' : 'Adicionar à biblioteca'}
+            <Button
+              fullWidth
+              disabled={libraryStatus === 'adding'}
+              onClick={() => void addToLibrary()}
+            >
+              {libraryStatus === 'adding' ? 'Adicionando...' : 'Quero ler'}
             </Button>
           )}
+
           {libraryStatus === 'error' ? (
-            <p role="alert" className="mt-2 text-center text-xs text-content-muted">
+            <p role="alert" className="text-center text-xs text-content-muted">
               {libraryError}
             </p>
           ) : null}
