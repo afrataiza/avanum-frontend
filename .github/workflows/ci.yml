@@ -22,5 +22,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Debug Prettier
+        run: npx prettier src/pages/ExplorePage.tsx --write && git diff -- src/pages/ExplorePage.tsx
+
       - name: Validate
         run: npm run check
