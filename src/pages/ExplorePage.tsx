@@ -277,9 +277,7 @@ export function ExplorePage() {
   const [query, setQuery] = useState(searchParams.get('q') ?? '')
   const [results, setResults] = useState<Book[]>([])
   const [total, setTotal] = useState(0)
-  const [status, setStatus] = useState<SearchStatus>(
-    searchParams.get('q') ? 'loading' : 'idle',
-  )
+  const [status, setStatus] = useState<SearchStatus>(searchParams.get('q') ? 'loading' : 'idle')
   const [error, setError] = useState<string | null>(null)
 
   const search = async (value: string) => {
@@ -446,8 +444,8 @@ export function BookDetailsPage() {
   const navigate = useNavigate()
   const { id } = useParams()
   const [book, setBook] = useState<Book | null>(null)
-  const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'empty'>(
-    () => (id ? 'loading' : 'empty'),
+  const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'empty'>(() =>
+    id ? 'loading' : 'empty',
   )
   const [isInLibrary, setIsInLibrary] = useState(false)
   const [libraryStatus, setLibraryStatus] = useState<'idle' | 'adding' | 'added' | 'error'>('idle')
@@ -522,7 +520,7 @@ export function BookDetailsPage() {
       setIsInLibrary(true)
       setLibraryStatus('added')
       return true
-    } catch (cause) {
+    } catch {
       setLibraryStatus('error')
       return false
     }
