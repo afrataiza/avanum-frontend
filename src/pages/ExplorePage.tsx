@@ -275,9 +275,9 @@ export function ExplorePage() {
   const [query, setQuery] = useState(searchParams.get('q') ?? '')
   const [results, setResults] = useState<Book[]>([])
   const [total, setTotal] = useState(0)
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'empty' | 'error'>(
-    () => (searchParams.get('q') ? 'loading' : 'idle'),
-  )
+  const [status, setStatus] = useState<
+    'idle' | 'loading' | 'success' | 'empty' | 'error'
+  >(() => (searchParams.get('q') ? 'loading' : 'idle'))
   const [error, setError] = useState<string | null>(null)
 
   const search = async (value: string) => {
