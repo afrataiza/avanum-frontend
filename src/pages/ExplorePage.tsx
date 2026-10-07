@@ -17,7 +17,7 @@ const categoryTranslations: Record<string, string> = {
   Classics: 'Clássicos',
   'Young Adult Fiction': 'Ficção juvenil',
   'Juvenile Fiction': 'Ficção infantojuvenil',
-  'Children\'s stories': 'Histórias infantis',
+  "Children's stories": 'Histórias infantis',
   'Social Science': 'Ciências sociais',
   'Biography & Autobiography': 'Biografia e autobiografia',
   'Language Arts & Disciplines': 'Linguagem e disciplinas',
@@ -41,12 +41,15 @@ const metadataChipClass =
 
 function getPrimaryCategory(categories: string[]) {
   const category = categories[0]?.split('/')[0]?.trim()
-  return category ? categoryTranslations[category] ?? category : null
+  return category ? (categoryTranslations[category] ?? category) : null
 }
 
 function htmlToPlainText(value: string) {
   if (typeof DOMParser === 'undefined') {
-    return value.replace(/<[^>]*>/g, ' ').replace(/\\s+/g, ' ').trim()
+    return value
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\\s+/g, ' ')
+      .trim()
   }
 
   const document = new DOMParser().parseFromString(value, 'text/html')
@@ -135,13 +138,7 @@ function BookCover({
   )
 }
 
-function BookResultCard({
-  book,
-  onOpen,
-}: {
-  book: Book
-  onOpen: () => void
-}) {
+function BookResultCard({ book, onOpen }: { book: Book; onOpen: () => void }) {
   return (
     <button type="button" onClick={onOpen} className="focus-ring block w-full text-left">
       <Card className="h-full rounded-lg p-2.5 transition-opacity hover:opacity-90">
@@ -160,11 +157,7 @@ function BookResultCard({
   )
 }
 
-function wrapText(
-  context: CanvasRenderingContext2D,
-  text: string,
-  maxWidth: number,
-) {
+function wrapText(context: CanvasRenderingContext2D, text: string, maxWidth: number) {
   const words = text.split(' ')
   const lines: string[] = []
   let line = ''
@@ -310,9 +303,7 @@ export function ExplorePage() {
       setTotal(0)
       setStatus('error')
       setError(
-        cause instanceof ApiError
-          ? cause.message
-          : 'Não foi possível buscar os livros agora.',
+        cause instanceof ApiError ? cause.message : 'Não foi possível buscar os livros agora.',
       )
     }
   }
@@ -371,11 +362,7 @@ export function ExplorePage() {
         ) : null}
 
         {status === 'loading' ? (
-          <div
-            className="grid grid-cols-2 gap-3"
-            aria-live="polite"
-            aria-busy="true"
-          >
+          <div className="grid grid-cols-2 gap-3" aria-live="polite" aria-busy="true">
             {[1, 2, 3, 4].map((item) => (
               <div
                 key={item}
@@ -388,9 +375,7 @@ export function ExplorePage() {
         {status === 'empty' ? (
           <FeedbackState
             title="Nenhum livro encontrado"
-            description={
-              `Não encontramos resultados para “${query.trim()}”. Tente outro título ou autor.`
-            }
+            description={`Não encontramos resultados para “${query.trim()}”. Tente outro título ou autor.`}
           />
         ) : null}
 
@@ -409,12 +394,8 @@ export function ExplorePage() {
         {status === 'success' ? (
           <section aria-label="Resultados da busca">
             <div className="mb-4 flex items-end justify-between">
-              <h2 className="font-display text-[22px] font-semibold text-content">
-                Resultados
-              </h2>
-              <span className="text-xs text-content-muted">
-                {total.toLocaleString('pt-BR')}
-              </span>
+              <h2 className="font-display text-[22px] font-semibold text-content">Resultados</h2>
+              <span className="text-xs text-content-muted">{total.toLocaleString('pt-BR')}</span>
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -422,9 +403,7 @@ export function ExplorePage() {
                 <BookResultCard
                   key={book.id}
                   book={book}
-                  onOpen={() =>
-                    navigate(`/explorar/livro/${encodeURIComponent(book.id)}`)
-                  }
+                  onOpen={() => navigate(`/explorar/livro/${encodeURIComponent(book.id)}`)}
                 />
               ))}
             </div>
@@ -663,9 +642,7 @@ export function BookDetailsPage() {
 
         <div className="mt-8 grid grid-cols-2 gap-2">
           {book.publicationYear ? (
-            <div className={metadataChipClass}>
-              {book.publicationYear}
-            </div>
+            <div className={metadataChipClass}>{book.publicationYear}</div>
           ) : null}
 
           {category ? <div className={metadataChipClass}>{category}</div> : null}
@@ -715,9 +692,7 @@ export function BookDetailsPage() {
           </Button>
 
           {shareStatus === 'sharing' ? (
-            <p className="text-center text-xs text-content-muted">
-              Preparando imagem...
-            </p>
+            <p className="text-center text-xs text-content-muted">Preparando imagem...</p>
           ) : null}
 
           {shareStatus === 'error' ? (

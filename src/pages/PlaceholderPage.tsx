@@ -12,7 +12,7 @@ export function PlaceholderPage() {
   const { pathname } = useLocation()
   const title = pathname.startsWith('/leitura/iniciar/')
     ? 'Iniciar leitura'
-    : titles[pathname] ?? 'Avanum'
+    : (titles[pathname] ?? 'Avanum')
 
   return (
     <div className="flex min-h-full items-center justify-center px-6 py-12">
