@@ -275,7 +275,9 @@ export function ExplorePage() {
   const [query, setQuery] = useState(searchParams.get('q') ?? '')
   const [results, setResults] = useState<Book[]>([])
   const [total, setTotal] = useState(0)
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'empty' | 'error'>('idle')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'empty' | 'error'>(
+    () => (searchParams.get('q') ? 'loading' : 'idle'),
+  )
   const [error, setError] = useState<string | null>(null)
 
   const search = async (value: string) => {
@@ -310,8 +312,32 @@ export function ExplorePage() {
 
   useEffect(() => {
     const initialQuery = searchParams.get('q')
-    if (initialQuery) {
-      void search(initialQuery)
+    if (!initialQuery) return
+
+    let active = true
+
+    catalogApi
+      .search(initialQuery)
+      .then((response) => {
+        if (!active) return
+
+        setResults(response.items)
+        setTotal(response.total)
+        setStatus(response.items.length ? 'success' : 'empty')
+      })
+      .catch((cause) => {
+        if (!active) return
+
+        setResults([])
+        setTotal(0)
+        setStatus('error')
+        setError(
+          cause instanceof ApiError ? cause.message : 'Não foi possível buscar os livros agora.',
+        )
+      })
+
+    return () => {
+      active = false
     }
     // A URL é a fonte inicial da busca; novas buscas são disparadas pelo formulário.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -418,19 +444,17 @@ export function BookDetailsPage() {
   const navigate = useNavigate()
   const { id } = useParams()
   const [book, setBook] = useState<Book | null>(null)
-  const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'empty'>('loading')
+  const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'empty'>(
+    () => (id ? 'loading' : 'empty'),
+  )
   const [isInLibrary, setIsInLibrary] = useState(false)
   const [libraryStatus, setLibraryStatus] = useState<'idle' | 'adding' | 'added' | 'error'>('idle')
-  const [libraryError, setLibraryError] = useState<string | null>(null)
   const [shareStatus, setShareStatus] = useState<'idle' | 'sharing' | 'error'>('idle')
   const [shareError, setShareError] = useState<string | null>(null)
   const [synopsisExpanded, setSynopsisExpanded] = useState(false)
 
   useEffect(() => {
-    if (!id) {
-      setStatus('empty')
-      return
-    }
+    if (!id) return
 
     let active = true
 
@@ -477,7 +501,6 @@ export function BookDetailsPage() {
     if (!book) return false
 
     setLibraryStatus('adding')
-    setLibraryError(null)
 
     const payload: AddToLibraryInput = {
       externalId: book.id,
@@ -499,11 +522,6 @@ export function BookDetailsPage() {
       return true
     } catch (cause) {
       setLibraryStatus('error')
-      setLibraryError(
-        cause instanceof ApiError
-          ? cause.message
-          : 'Não foi possível adicionar o livro à biblioteca.',
-      )
       return false
     }
   }
