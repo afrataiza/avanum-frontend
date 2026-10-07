@@ -269,15 +269,17 @@ async function generateBookShareImage(book: Book) {
   })
 }
 
+type SearchStatus = 'idle' | 'loading' | 'success' | 'empty' | 'error'
+
 export function ExplorePage() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const [query, setQuery] = useState(searchParams.get('q') ?? '')
   const [results, setResults] = useState<Book[]>([])
   const [total, setTotal] = useState(0)
-  const [status, setStatus] = useState<
-    'idle' | 'loading' | 'success' | 'empty' | 'error'
-  >(() => (searchParams.get('q') ? 'loading' : 'idle'))
+  const [status, setStatus] = useState<SearchStatus>(
+    searchParams.get('q') ? 'loading' : 'idle',
+  )
   const [error, setError] = useState<string | null>(null)
 
   const search = async (value: string) => {
