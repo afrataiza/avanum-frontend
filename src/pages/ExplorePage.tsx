@@ -7,6 +7,52 @@ import { ApiError } from '@/lib/api/client'
 import type { AddToLibraryInput, Book } from '@/lib/api/types'
 import { Button, Card, FeedbackState, Input } from '@/components/ui'
 
+const categoryTranslations: Record<string, string> = {
+  Fiction: 'Ficção',
+  Romance: 'Romance',
+  Fantasy: 'Fantasia',
+  General: 'Geral',
+  Poetry: 'Poesia',
+  History: 'História',
+  Classics: 'Clássicos',
+  'Young Adult Fiction': 'Ficção juvenil',
+  'Juvenile Fiction': 'Ficção infantojuvenil',
+  'Children\'s stories': 'Histórias infantis',
+  'Social Science': 'Ciências sociais',
+  'Biography & Autobiography': 'Biografia e autobiografia',
+  'Language Arts & Disciplines': 'Linguagem e disciplinas',
+  'Performing Arts': 'Artes cênicas',
+  Law: 'Direito',
+  Computers: 'Computação',
+  'Business & Economics': 'Negócios e economia',
+  'Literary Criticism': 'Crítica literária',
+  'Self-Help': 'Autoajuda',
+  Psychology: 'Psicologia',
+  Philosophy: 'Filosofia',
+  Education: 'Educação',
+  Religion: 'Religião',
+  Science: 'Ciência',
+  Travel: 'Viagem',
+  Cooking: 'Culinária',
+}
+
+const metadataChipClass =
+  'flex min-h-8 items-center justify-center rounded-md border border-border bg-surface-elevated px-3 text-[11px] font-semibold text-content'
+
+function getPrimaryCategory(categories: string[]) {
+  const category = categories[0]?.split('/')[0]?.trim()
+  return category ? categoryTranslations[category] ?? category : null
+}
+
+function htmlToPlainText(value: string) {
+  if (typeof DOMParser === 'undefined') {
+    return value.replace(/<[^>]*>/g, ' ').replace(/\\s+/g, ' ').trim()
+  }
+
+  const document = new DOMParser().parseFromString(value, 'text/html')
+  return document.body.textContent?.replace(/\\s+/g, ' ').trim() ?? ''
+}
+
 function SearchIcon() {
   return (
     <svg
@@ -44,18 +90,7 @@ function BackIcon() {
   )
 }
 
-const resultCardClass =
-  'flex min-h-24 items-center gap-4 rounded-lg p-3 transition-opacity hover:opacity-90'
-const resultTitleClass =
-  'line-clamp-2 font-display text-[17px] font-semibold leading-[1.05] text-content'
-const resultCategoryClass =
-  'mt-2 inline-flex rounded-sm bg-surface-muted px-2 py-1 text-[10px] font-medium text-content-accent-muted'
-const resultPlusClass =
-  'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent text-accent'
-const metadataChipClass =
-  'flex min-h-8 items-center justify-center gap-1 rounded-md border border-border bg-surface-elevated px-2 text-[11px] font-semibold text-content'
-
-function BookmarkIcon() {
+function BookmarkIcon({ filled = false }: { filled?: boolean }) {
   return (
     <svg
       aria-hidden="true"
@@ -64,8 +99,24 @@ function BookmarkIcon() {
     >
       <path
         d="M6.5 4.5A1.5 1.5 0 0 1 8 3h8a1.5 1.5 0 0 1 1.5 1.5V21l-5.5-3-5.5 3V4.5Z"
+        fill={filled ? 'currentColor' : 'none'}
         strokeLinejoin="round"
       />
+    </svg>
+  )
+}
+
+function ShareIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-5 w-5 fill-none stroke-current stroke-[1.8]"
+    >
+      <circle cx="18" cy="5" r="2.5" />
+      <circle cx="6" cy="12" r="2.5" />
+      <circle cx="18" cy="19" r="2.5" />
+      <path d="m8.3 10.8 7.4-4.5M8.3 13.2l7.4 4.5" strokeLinecap="round" />
     </svg>
   )
 }
@@ -88,9 +139,7 @@ function BookCover({
           className="h-full w-full object-cover"
         />
       ) : (
-        <div
-          className="flex h-full w-full items-center justify-center p-2 text-center text-[10px] text-content-muted"
-        >
+        <div className="flex h-full w-full items-center justify-center p-2 text-center text-[10px] text-content-muted">
           Sem capa
         </div>
       )}
@@ -105,46 +154,138 @@ function BookResultCard({
   book: Book
   onOpen: () => void
 }) {
-  const category = book.categories[0]
-
   return (
-    <button
-      type="button"
-      onClick={onOpen}
-      className="focus-ring block w-full text-left"
-    >
-      <Card
-        className={resultCardClass}
-      >
-        <BookCover book={book} className="h-[72px] w-[50px]" />
+    <button type="button" onClick={onOpen} className="focus-ring block w-full text-left">
+      <Card className="h-full rounded-lg p-2.5 transition-opacity hover:opacity-90">
+        <BookCover book={book} className="aspect-[2/3] w-full rounded-md" />
 
-        <div className="min-w-0 flex-1">
-          <h3
-            className={resultTitleClass}
-          >
+        <div className="px-0.5 pb-1 pt-3">
+          <h3 className="line-clamp-2 font-display text-[17px] font-semibold leading-[1.05] text-content">
             {book.title}
           </h3>
-          <p className="mt-1 text-[13px] leading-4 text-content-muted">
+          <p className="mt-1 line-clamp-2 text-[12px] leading-4 text-content-muted">
             {book.authors.length ? book.authors.join(', ') : 'Autor desconhecido'}
           </p>
-          {category ? (
-            <span
-              className={resultCategoryClass}
-            >
-              {category}
-            </span>
-          ) : null}
         </div>
-
-        <span
-          aria-hidden="true"
-          className={resultPlusClass}
-        >
-          <PlusIcon />
-        </span>
       </Card>
     </button>
   )
+}
+
+function wrapText(
+  context: CanvasRenderingContext2D,
+  text: string,
+  maxWidth: number,
+) {
+  const words = text.split(' ')
+  const lines: string[] = []
+  let line = ''
+
+  for (const word of words) {
+    const candidate = line ? `${line} ${word}` : word
+    if (context.measureText(candidate).width <= maxWidth) {
+      line = candidate
+    } else if (line) {
+      lines.push(line)
+      line = word
+    } else {
+      lines.push(word)
+      line = ''
+    }
+  }
+
+  if (line) lines.push(line)
+  return lines
+}
+
+async function loadCoverImage(url: string) {
+  const response = await fetch(url, { mode: 'cors' })
+  if (!response.ok) throw new Error('Cover unavailable')
+
+  const blob = await response.blob()
+  return createImageBitmap(blob)
+}
+
+async function generateBookShareImage(book: Book) {
+  const canvas = document.createElement('canvas')
+  canvas.width = 1080
+  canvas.height = 1350
+
+  const context = canvas.getContext('2d')
+  if (!context) throw new Error('Canvas unavailable')
+
+  context.fillStyle = '#121416'
+  context.fillRect(0, 0, canvas.width, canvas.height)
+
+  const accent = '#C8A96B'
+  const content = '#E8E0CF'
+  const muted = '#A9ACA5'
+
+  if (book.coverUrl) {
+    const image = await loadCoverImage(book.coverUrl)
+    const coverWidth = 420
+    const coverHeight = 600
+    const x = (canvas.width - coverWidth) / 2
+    const y = 90
+
+    context.save()
+    context.beginPath()
+    context.roundRect(x, y, coverWidth, coverHeight, 18)
+    context.clip()
+    context.drawImage(image, x, y, coverWidth, coverHeight)
+    context.restore()
+    image.close()
+  }
+
+  context.textAlign = 'center'
+  context.fillStyle = content
+  context.font = '600 52px "Cormorant Garamond", Georgia, serif'
+
+  const titleLines = wrapText(context, book.title, 900)
+  titleLines.slice(0, 3).forEach((line, index) => {
+    context.fillText(line, canvas.width / 2, 790 + index * 62)
+  })
+
+  context.fillStyle = muted
+  context.font = '400 30px Inter, sans-serif'
+  const author = book.authors.length ? book.authors.join(', ') : 'Autor desconhecido'
+  context.fillText(author, canvas.width / 2, 995)
+
+  context.strokeStyle = accent
+  context.globalAlpha = 0.45
+  context.setLineDash([8, 12])
+  context.beginPath()
+  context.moveTo(90, 1080)
+  context.lineTo(990, 1080)
+  context.stroke()
+  context.globalAlpha = 1
+  context.setLineDash([])
+
+  context.strokeStyle = accent
+  context.lineWidth = 4
+  context.beginPath()
+  context.arc(475, 1190, 28, 0, Math.PI * 2)
+  context.stroke()
+
+  context.fillStyle = accent
+  context.beginPath()
+  context.moveTo(475, 1168)
+  context.lineTo(481, 1190)
+  context.lineTo(475, 1212)
+  context.lineTo(469, 1190)
+  context.closePath()
+  context.fill()
+
+  context.textAlign = 'left'
+  context.font = '600 36px Inter, sans-serif'
+  context.fillText('Avanum', 525, 1202)
+
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) resolve(blob)
+      else reject(new Error('Image generation failed'))
+    }, 'image/png')
+  })
 }
 
 export function ExplorePage() {
@@ -216,9 +357,7 @@ export function ExplorePage() {
         </label>
 
         <div className="relative">
-          <span
-            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-accent"
-          >
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-accent">
             <SearchIcon />
           </span>
 
@@ -244,11 +383,15 @@ export function ExplorePage() {
         ) : null}
 
         {status === 'loading' ? (
-          <div className="space-y-3" aria-live="polite" aria-busy="true">
-            {[1, 2, 3].map((item) => (
+          <div
+            className="grid grid-cols-2 gap-3"
+            aria-live="polite"
+            aria-busy="true"
+          >
+            {[1, 2, 3, 4].map((item) => (
               <div
                 key={item}
-                className="h-24 animate-pulse rounded-lg border border-border bg-surface-elevated"
+                className="h-64 animate-pulse rounded-lg border border-border bg-surface-elevated"
               />
             ))}
           </div>
@@ -286,7 +429,7 @@ export function ExplorePage() {
               </span>
             </div>
 
-            <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {results.map((book) => (
                 <BookResultCard
                   key={book.id}
@@ -309,8 +452,12 @@ export function BookDetailsPage() {
   const { id } = useParams()
   const [book, setBook] = useState<Book | null>(null)
   const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'empty'>('loading')
+  const [isInLibrary, setIsInLibrary] = useState(false)
   const [libraryStatus, setLibraryStatus] = useState<'idle' | 'adding' | 'added' | 'error'>('idle')
   const [libraryError, setLibraryError] = useState<string | null>(null)
+  const [shareStatus, setShareStatus] = useState<'idle' | 'sharing' | 'error'>('idle')
+  const [shareError, setShareError] = useState<string | null>(null)
+  const [synopsisExpanded, setSynopsisExpanded] = useState(false)
 
   useEffect(() => {
     if (!id) {
@@ -337,6 +484,28 @@ export function BookDetailsPage() {
     }
   }, [id])
 
+  useEffect(() => {
+    if (!book) return
+
+    let active = true
+
+    libraryApi
+      .list()
+      .then((items) => {
+        if (active && items.some((item) => item.book.id === book.id)) {
+          setIsInLibrary(true)
+          setLibraryStatus('added')
+        }
+      })
+      .catch(() => {
+        // Library state is secondary to the book details experience.
+      })
+
+    return () => {
+      active = false
+    }
+  }, [book])
+
   const addToLibrary = async () => {
     if (!book) return
 
@@ -358,6 +527,7 @@ export function BookDetailsPage() {
 
     try {
       await libraryApi.add(payload)
+      setIsInLibrary(true)
       setLibraryStatus('added')
     } catch (cause) {
       setLibraryStatus('error')
@@ -366,6 +536,47 @@ export function BookDetailsPage() {
           ? cause.message
           : 'Não foi possível adicionar o livro à biblioteca.',
       )
+    }
+  }
+
+  const shareBook = async () => {
+    if (!book || !book.coverUrl) {
+      setShareStatus('error')
+      setShareError('Este livro não possui uma capa disponível para compartilhar.')
+      return
+    }
+
+    if (!navigator.share || !navigator.canShare) {
+      setShareStatus('error')
+      setShareError('O compartilhamento de imagens não está disponível neste navegador.')
+      return
+    }
+
+    setShareStatus('sharing')
+    setShareError(null)
+
+    try {
+      const blob = await generateBookShareImage(book)
+      const file = new File([blob], 'avanum-livro.png', { type: 'image/png' })
+
+      if (!navigator.canShare({ files: [file] })) {
+        throw new Error('File sharing unavailable')
+      }
+
+      await navigator.share({
+        files: [file],
+        title: book.title,
+        text: book.authors.join(', '),
+      })
+      setShareStatus('idle')
+    } catch (cause) {
+      if (cause instanceof DOMException && cause.name === 'AbortError') {
+        setShareStatus('idle')
+        return
+      }
+
+      setShareStatus('error')
+      setShareError('Não foi possível gerar a imagem para compartilhar.')
     }
   }
 
@@ -393,7 +604,14 @@ export function BookDetailsPage() {
     )
   }
 
-  const category = book.categories[0]
+  const category = getPrimaryCategory(book.categories)
+  const synopsis = book.synopsis ? htmlToPlainText(book.synopsis) : ''
+  const synopsisLimit = 520
+  const synopsisIsLong = synopsis.length > synopsisLimit
+  const visibleSynopsis =
+    synopsisExpanded || !synopsisIsLong
+      ? synopsis
+      : `${synopsis.slice(0, synopsisLimit).trimEnd()}…`
 
   return (
     <div className="screen-padding pb-8 pt-5">
@@ -407,21 +625,33 @@ export function BookDetailsPage() {
           Voltar
         </button>
 
-        <span
-          aria-hidden="true"
-          className="rounded-md p-2 text-content-muted"
-        >
-          <BookmarkIcon />
-        </span>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            aria-label="Compartilhar livro"
+            onClick={() => void shareBook()}
+            className="focus-ring rounded-md p-2 text-content-muted transition-colors hover:text-accent"
+          >
+            <ShareIcon />
+          </button>
+
+          <span
+            aria-label={isInLibrary ? 'Livro na biblioteca' : 'Livro não adicionado à biblioteca'}
+            title={isInLibrary ? 'Na biblioteca' : 'Adicionar à biblioteca'}
+            className={`rounded-md p-2 transition-colors ${
+              isInLibrary ? 'text-accent' : 'text-content-muted'
+            }`}
+          >
+            <BookmarkIcon filled={isInLibrary} />
+          </span>
+        </div>
       </header>
 
       <article className="mt-7">
         <div className="flex flex-col items-center text-center">
           <BookCover book={book} className="h-[140px] w-[100px] rounded-lg" />
 
-          <h1
-            className="mt-5 max-w-[330px] font-display text-[28px] font-semibold leading-[1.02] text-content"
-          >
+          <h1 className="mt-5 max-w-[330px] font-display text-[28px] font-semibold leading-[1.02] text-content">
             {book.title}
           </h1>
 
@@ -430,40 +660,32 @@ export function BookDetailsPage() {
           </p>
         </div>
 
-        <div className="mt-8 grid grid-cols-3 gap-2">
-          {category ? (
-            <div
-              className={metadataChipClass}
-            >
-              {category}
-            </div>
-          ) : null}
-
+        <div className="mt-8 grid grid-cols-2 gap-2">
           {book.publicationYear ? (
-            <div
-              className="flex min-h-8 items-center justify-center gap-1 rounded-md border border-border bg-surface-elevated px-2 text-[11px] font-semibold text-content"
-            >
+            <div className={metadataChipClass}>
               {book.publicationYear}
             </div>
           ) : null}
 
-          {book.language ? (
-            <div
-              className={metadataChipClass}
-            >
-              {book.language}
-            </div>
-          ) : null}
+          {category ? <div className={metadataChipClass}>{category}</div> : null}
         </div>
 
-        {book.synopsis ? (
+        {synopsis ? (
           <section className="mt-7">
-            <h2 className="font-display text-[20px] font-semibold text-content">
-              Sinopse
-            </h2>
-            <p className="mt-3 text-[13px] leading-[1.65] text-content">
-              {book.synopsis}
+            <h2 className="font-display text-[20px] font-semibold text-content">Sinopse</h2>
+            <p className="mt-3 whitespace-pre-line text-[13px] leading-[1.65] text-content">
+              {visibleSynopsis}
             </p>
+
+            {synopsisIsLong ? (
+              <button
+                type="button"
+                onClick={() => setSynopsisExpanded((current) => !current)}
+                className="focus-ring mt-2 rounded-md py-1 text-xs font-semibold text-accent"
+              >
+                {synopsisExpanded ? 'Ler menos' : 'Leia mais'}
+              </button>
+            ) : null}
           </section>
         ) : null}
 
@@ -471,12 +693,8 @@ export function BookDetailsPage() {
 
         <div className="space-y-3">
           {libraryStatus === 'added' ? (
-            <Button
-              fullWidth
-              variant="secondary"
-              onClick={() => navigate('/biblioteca')}
-            >
-              Na biblioteca
+            <Button fullWidth variant="secondary" onClick={() => navigate(`/leitura/iniciar/${book.id}`)}>
+              Iniciar leitura
             </Button>
           ) : (
             <Button
@@ -488,9 +706,19 @@ export function BookDetailsPage() {
             </Button>
           )}
 
-          {libraryStatus === 'error' ? (
+          {libraryStatus === 'added' ? (
+            <Button
+              fullWidth
+              variant="secondary"
+              onClick={() => navigate(`/leitura/iniciar/${book.id}`)}
+            >
+              Iniciar leitura
+            </Button>
+          ) : null}
+
+          {shareStatus === 'error' ? (
             <p role="alert" className="text-center text-xs text-content-muted">
-              {libraryError}
+              {shareError}
             </p>
           ) : null}
         </div>
