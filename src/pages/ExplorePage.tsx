@@ -495,7 +495,7 @@ export function BookDetailsPage() {
   }, [book])
 
   const addToLibrary = async () => {
-    if (!book) return
+    if (!book) return false
 
     setLibraryStatus('adding')
     setLibraryError(null)
@@ -517,6 +517,7 @@ export function BookDetailsPage() {
       await libraryApi.add(payload)
       setIsInLibrary(true)
       setLibraryStatus('added')
+      return true
     } catch (cause) {
       setLibraryStatus('error')
       setLibraryError(
@@ -524,6 +525,7 @@ export function BookDetailsPage() {
           ? cause.message
           : 'Não foi possível adicionar o livro à biblioteca.',
       )
+      return false
     }
   }
 
@@ -531,8 +533,8 @@ export function BookDetailsPage() {
     if (!book) return
 
     if (!isInLibrary) {
-      await addToLibrary()
-      return
+      const added = await addToLibrary()
+      if (!added) return
     }
 
     navigate(`/leitura/iniciar/${book.id}`)
