@@ -35,6 +35,10 @@ export const router = createBrowserRouter([
         element: <BookDetailsRoute />,
       },
       {
+        path: 'leitura/iniciar/:id',
+        element: <ProtectedScreen />,
+      },
+      {
         path: 'biblioteca',
         element: <ProtectedScreen />,
       },
