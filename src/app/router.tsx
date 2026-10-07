@@ -1,7 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { ProtectedRoute } from '@/components/auth'
 import { ApiIntegrationPage } from '@/pages/ApiIntegrationPage'
-import { JourneyRoute, OnboardingRoute, ProtectedScreen } from './RouteScreens'
+import {
+  JourneyRoute,
+  OnboardingRoute,
+  ProtectedScreen,
+  ExploreRoute,
+  BookDetailsRoute,
+} from './RouteScreens'
 import { SignInPage } from '@/pages/SignInPage'
 
 export const router = createBrowserRouter([
@@ -22,6 +28,14 @@ export const router = createBrowserRouter([
       },
       {
         path: 'explorar',
+        element: <ExploreRoute />,
+      },
+      {
+        path: 'explorar/livro/:id',
+        element: <BookDetailsRoute />,
+      },
+      {
+        path: 'leitura/iniciar/:id',
         element: <ProtectedScreen />,
       },
       {

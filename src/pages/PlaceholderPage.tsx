@@ -10,7 +10,9 @@ const titles: Record<string, string> = {
 
 export function PlaceholderPage() {
   const { pathname } = useLocation()
-  const title = titles[pathname] ?? 'Avanum'
+  const title = pathname.startsWith('/leitura/iniciar/')
+    ? 'Iniciar leitura'
+    : (titles[pathname] ?? 'Avanum')
 
   return (
     <div className="flex min-h-full items-center justify-center px-6 py-12">

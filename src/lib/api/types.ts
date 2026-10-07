@@ -182,7 +182,9 @@ export type ApplyExpeditionProgressInput = {
   idempotencyKey: string
 }
 
-export type AddToLibraryInput = Omit<Book, 'id'>
+export type AddToLibraryInput = Omit<Book, 'id'> & {
+  externalId: string
+}
 
 export type StartReadingInput = {
   userBookId: string
