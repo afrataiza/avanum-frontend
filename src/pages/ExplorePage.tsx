@@ -66,18 +66,6 @@ function SearchIcon() {
   )
 }
 
-function PlusIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className="h-4 w-4 fill-none stroke-current stroke-[2]"
-    >
-      <path d="M12 7v10M7 12h10" strokeLinecap="round" />
-    </svg>
-  )
-}
-
 function BackIcon() {
   return (
     <svg
@@ -539,6 +527,17 @@ export function BookDetailsPage() {
     }
   }
 
+  const startReading = async () => {
+    if (!book) return
+
+    if (!isInLibrary) {
+      await addToLibrary()
+      return
+    }
+
+    navigate(`/leitura/iniciar/${book.id}`)
+  }
+
   const shareBook = async () => {
     if (!book || !book.coverUrl) {
       setShareStatus('error')
@@ -692,28 +691,31 @@ export function BookDetailsPage() {
         <div className="my-5 border-b border-dashed border-content-accent-muted/70" />
 
         <div className="space-y-3">
-          {libraryStatus === 'added' ? (
-            <Button fullWidth variant="secondary" onClick={() => navigate(`/leitura/iniciar/${book.id}`)}>
-              Iniciar leitura
-            </Button>
-          ) : (
-            <Button
-              fullWidth
-              disabled={libraryStatus === 'adding'}
-              onClick={() => void addToLibrary()}
-            >
-              {libraryStatus === 'adding' ? 'Adicionando...' : 'Quero ler'}
-            </Button>
-          )}
+          <Button
+            fullWidth
+            disabled={libraryStatus === 'adding'}
+            onClick={() => void addToLibrary()}
+          >
+            {libraryStatus === 'adding'
+              ? 'Adicionando...'
+              : isInLibrary
+                ? 'Na biblioteca'
+                : 'Quero ler'}
+          </Button>
 
-          {libraryStatus === 'added' ? (
-            <Button
-              fullWidth
-              variant="secondary"
-              onClick={() => navigate(`/leitura/iniciar/${book.id}`)}
-            >
-              Iniciar leitura
-            </Button>
+          <Button
+            fullWidth
+            variant="secondary"
+            disabled={libraryStatus === 'adding'}
+            onClick={() => void startReading()}
+          >
+            Iniciar leitura
+          </Button>
+
+          {shareStatus === 'sharing' ? (
+            <p className="text-center text-xs text-content-muted">
+              Preparando imagem...
+            </p>
           ) : null}
 
           {shareStatus === 'error' ? (
