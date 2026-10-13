@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Check, Pause, X } from 'lucide-react'
 import { Button, Card, FeedbackState } from '@/components/ui'
 import { libraryApi } from '@/lib/api'
 import type { UserBook } from '@/lib/api'
@@ -53,13 +54,21 @@ function BookCard({ userBook, onOpen }: { userBook: UserBook; onOpen: () => void
       ? 'border-sky-200 bg-sky-100 text-sky-900'
       : status === 'completed'
         ? 'border-emerald-200 bg-emerald-100 text-emerald-900'
-        : status === 'want_to_read'
-          ? 'border-accent-border bg-accent/10 text-accent'
-          : status === 'paused'
-            ? 'border-amber-200 bg-amber-100 text-amber-900'
-            : 'border-border bg-surface-muted text-content-muted'
-  const badgeText =
-    status === 'reading' && progress !== null ? `${progress}%` : statusLabels[status]
+        : status === 'paused'
+          ? 'border-amber-200 bg-amber-100 text-amber-900'
+          : 'border-border bg-surface-muted text-content-muted'
+
+  const showBadge = status !== 'want_to_read'
+  const badgeLabel =
+    status === 'reading'
+      ? progress !== null
+        ? `${progress}% lido`
+        : 'Leitura em andamento'
+      : status === 'completed'
+        ? 'Concluído'
+        : status === 'paused'
+          ? 'Pausado'
+          : 'Interrompido'
 
   return (
     <button
@@ -82,11 +91,23 @@ function BookCard({ userBook, onOpen }: { userBook: UserBook; onOpen: () => void
               {userBook.book.title}
             </div>
           )}
-          <span
-            className={`absolute right-2 top-2 inline-flex max-w-[calc(100%-1rem)] items-center rounded-md border px-2 py-1 text-[10px] font-bold leading-none shadow-sm ${badgeClass}`}
-          >
-            {badgeText}
-          </span>
+          {showBadge && (
+            <span
+              title={badgeLabel}
+              aria-label={badgeLabel}
+              className={`absolute right-2 top-2 inline-flex items-center justify-center rounded-md border p-1.5 shadow-sm ${badgeClass}`}
+            >
+              {status === 'reading' && progress !== null ? (
+                <span className="px-0.5 text-[10px] font-bold leading-none">{progress}%</span>
+              ) : status === 'completed' ? (
+                <Check size={14} strokeWidth={2.5} aria-hidden="true" />
+              ) : status === 'paused' ? (
+                <Pause size={14} strokeWidth={2.5} aria-hidden="true" />
+              ) : (
+                <X size={14} strokeWidth={2.5} aria-hidden="true" />
+              )}
+            </span>
+          )}
         </div>
 
         <div className="min-w-0 pt-3">
