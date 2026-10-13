@@ -7,6 +7,7 @@ import {
   ProtectedScreen,
   ExploreRoute,
   BookDetailsRoute,
+  LibraryRoute,
 } from './RouteScreens'
 import { SignInPage } from '@/pages/SignInPage'
 
@@ -40,7 +41,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'biblioteca',
-        element: <ProtectedScreen />,
+        element: <LibraryRoute />,
       },
       {
         path: 'mapa',
