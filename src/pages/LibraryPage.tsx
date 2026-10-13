@@ -4,11 +4,12 @@ import { Button, Card, FeedbackState } from '@/components/ui'
 import { libraryApi } from '@/lib/api'
 import type { UserBook } from '@/lib/api'
 
-type LibraryTab = 'reading' | 'completed' | 'want_to_read' | 'more'
+type LibraryTab = 'all' | 'reading' | 'completed' | 'want_to_read' | 'more'
 type ExtraStatus = 'paused' | 'abandoned'
 type LibraryStatus = 'reading' | 'paused' | 'abandoned' | 'completed' | 'want_to_read'
 
 const tabs: { id: LibraryTab; label: string }[] = [
+  { id: 'all', label: 'Todos' },
   { id: 'reading', label: 'Lendo' },
   { id: 'completed', label: 'Concluídos' },
   { id: 'want_to_read', label: 'Quero Ler' },
@@ -47,73 +48,56 @@ function BookCard({ userBook, onOpen }: { userBook: UserBook; onOpen: () => void
       ? Math.min(100, Math.round((reading.currentUnits / reading.totalUnits) * 100))
       : null
 
-  const tagClass =
-    status === 'completed' || status === 'reading'
-      ? 'bg-[#a76d58] text-content'
-      : status === 'want_to_read'
-        ? 'bg-accent text-surface'
-        : 'bg-surface-muted text-content'
-  const tagText = status === 'reading' && progress !== null ? `${progress}%` : statusLabels[status]
+  const badgeClass =
+    status === 'reading'
+      ? 'border-sky-200 bg-sky-100 text-sky-900'
+      : status === 'completed'
+        ? 'border-emerald-200 bg-emerald-100 text-emerald-900'
+        : status === 'want_to_read'
+          ? 'border-accent-border bg-accent/10 text-accent'
+          : status === 'paused'
+            ? 'border-amber-200 bg-amber-100 text-amber-900'
+            : 'border-border bg-surface-muted text-content-muted'
+  const badgeText =
+    status === 'reading' && progress !== null ? `${progress}%` : statusLabels[status]
 
   return (
     <button
       type="button"
       onClick={onOpen}
-      className="focus-ring block min-w-0 w-full rounded-2xl text-left"
+      className="focus-ring block min-w-0 w-full rounded-lg text-left"
       aria-label={`Abrir ${userBook.book.title}`}
     >
-      <Card className="h-full rounded-2xl p-3 transition-colors hover:border-accent-border">
-        <div className="relative flex h-[104px] w-[72px] flex-col justify-between overflow-hidden rounded-lg border border-accent-border bg-surface-muted p-2">
+      <div className="min-w-0">
+        <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-surface-muted">
           {userBook.book.coverUrl ? (
             <img
               src={userBook.book.coverUrl}
-              alt=""
+              alt={`Capa de ${userBook.book.title}`}
               loading="lazy"
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-200 hover:scale-[1.02]"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-surface-muted p-1 text-center font-display text-xs font-semibold text-content-muted">
+            <div className="absolute inset-0 flex items-center justify-center p-3 text-center font-display text-sm font-semibold text-content-muted">
               {userBook.book.title}
             </div>
           )}
-          <div className="absolute inset-0 bg-black/20" />
           <span
-            className={`relative z-10 -ml-1 -mt-1 w-fit max-w-full truncate rounded px-1.5 py-0.5 text-[8px] font-bold ${tagClass}`}
+            className={`absolute right-2 top-2 inline-flex max-w-[calc(100%-1rem)] items-center rounded-md border px-2 py-1 text-[10px] font-bold leading-none shadow-sm ${badgeClass}`}
           >
-            {tagText}
+            {badgeText}
           </span>
-          <div className="relative z-10 mt-auto min-w-0">
-            <p className="line-clamp-2 font-display text-[9px] font-semibold leading-tight text-content">
-              {userBook.book.title}
-            </p>
-            <p className="mt-0.5 truncate text-[7px] text-accent">
-              {userBook.book.authors.join(', ') || 'Autor desconhecido'}
-            </p>
-          </div>
         </div>
 
-        <div className="mt-3 min-w-0">
-          <h2 className="line-clamp-2 font-display text-[15px] font-semibold leading-tight text-content">
+        <div className="min-w-0 pt-3">
+          <h2 className="line-clamp-2 font-display text-[17px] font-semibold leading-[1.05] text-content">
             {userBook.book.title}
           </h2>
-          <p className="mt-1 truncate text-xs text-content-muted">
+          <p className="mt-1 line-clamp-2 text-[12px] leading-4 text-content-muted">
             {userBook.book.authors.join(', ') || 'Autor desconhecido'}
           </p>
-          {status === 'reading' && reading ? (
-            <div className="mt-3">
-              <div className="h-1 overflow-hidden rounded-full bg-surface-muted">
-                <div
-                  className="h-full rounded-full bg-accent"
-                  style={{ width: `${progress ?? 0}%` }}
-                />
-              </div>
-              <p className="mt-1.5 text-[10px] text-content-muted">
-                {reading.currentUnits} de {reading.totalUnits} unidades
-              </p>
-            </div>
-          ) : null}
         </div>
-      </Card>
+      </div>
     </button>
   )
 }
@@ -140,7 +124,7 @@ export function LibraryPage() {
   const [items, setItems] = useState<UserBook[]>([])
   const [loadStatus, setLoadStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [retryKey, setRetryKey] = useState(0)
-  const [activeTab, setActiveTab] = useState<LibraryTab>('reading')
+  const [activeTab, setActiveTab] = useState<LibraryTab>('all')
   const [extraStatus, setExtraStatus] = useState<ExtraStatus>('paused')
 
   useEffect(() => {
@@ -174,6 +158,8 @@ export function LibraryPage() {
   }, [items])
 
   const filteredItems = useMemo(() => {
+    if (activeTab === 'all') return items
+
     if (activeTab === 'more') {
       return items.filter((item) => getLibraryStatus(item) === extraStatus)
     }
@@ -303,7 +289,9 @@ export function LibraryPage() {
         ) : (
           <FeedbackState
             title={
-              activeTab === 'reading'
+              activeTab === 'all'
+                ? 'Sua biblioteca está vazia'
+                : activeTab === 'reading'
                 ? 'Nenhuma leitura em andamento'
                 : activeTab === 'completed'
                   ? 'Suas próximas conquistas começam aqui'
@@ -314,7 +302,9 @@ export function LibraryPage() {
                       : 'Nenhum livro interrompido'
             }
             description={
-              activeTab === 'reading'
+              activeTab === 'all'
+                ? 'Explore o catálogo e adicione livros para montar sua estante.'
+                : activeTab === 'reading'
                 ? 'Escolha um livro da biblioteca e comece a explorar novas histórias.'
                 : activeTab === 'completed'
                   ? 'Quando concluir uma leitura, ela aparecerá nesta estante.'
