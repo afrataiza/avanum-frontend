@@ -3,6 +3,7 @@ import { PlaceholderPage } from '@/pages/PlaceholderPage'
 import { JourneyPage } from '@/pages/JourneyPage'
 import { OnboardingPage } from '@/pages/OnboardingPage'
 import { ExplorePage, BookDetailsPage } from '@/pages/ExplorePage'
+import { LibraryPage } from '@/pages/LibraryPage'
 
 export function JourneyRoute() {
   return (
@@ -24,6 +25,14 @@ export function BookDetailsRoute() {
   return (
     <AppShell>
       <BookDetailsPage />
+    </AppShell>
+  )
+}
+
+export function LibraryRoute() {
+  return (
+    <AppShell>
+      <LibraryPage />
     </AppShell>
   )
 }
