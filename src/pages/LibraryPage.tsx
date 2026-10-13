@@ -221,61 +221,61 @@ export function LibraryPage() {
     <div className="pb-8">
       <div className="sticky top-0 z-10 bg-surface pb-1">
       <header className="space-y-3 px-6 pt-6">
-        <h1 className="font-display text-[28px] font-semibold leading-tight text-content">
-          Sua Biblioteca
-        </h1>
+          <h1 className="font-display text-[28px] font-semibold leading-tight text-content">
+            Sua Biblioteca
+          </h1>
 
-        <section
-          aria-label="Estatísticas da biblioteca"
-          className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-elevated p-3.5"
+          <section
+            aria-label="Estatísticas da biblioteca"
+            className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-elevated p-3.5"
+          >
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase text-content-muted">Total</p>
+              <p className="mt-0.5 font-display text-lg font-bold text-accent">
+                {counts.total} {counts.total === 1 ? 'livro' : 'livros'}
+              </p>
+            </div>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase text-content-muted">Lendo</p>
+              <p className="mt-0.5 font-display text-lg font-bold text-content-accent-muted">
+                {counts.reading} ativos
+              </p>
+            </div>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase text-content-muted">Concluídos</p>
+              <p className="mt-0.5 font-display text-lg font-bold text-[#a76d58]">
+                {counts.completed} lidos
+              </p>
+            </div>
+          </section>
+        </header>
+
+        <div
+          role="tablist"
+          aria-label="Filtrar biblioteca"
+          className="mt-6 flex gap-5 overflow-x-auto border-b border-border px-6"
         >
-          <div className="min-w-0">
-            <p className="text-[10px] uppercase text-content-muted">Total</p>
-            <p className="mt-0.5 font-display text-lg font-bold text-accent">
-              {counts.total} {counts.total === 1 ? 'livro' : 'livros'}
-            </p>
-          </div>
-          <div className="min-w-0">
-            <p className="text-[10px] uppercase text-content-muted">Lendo</p>
-            <p className="mt-0.5 font-display text-lg font-bold text-content-accent-muted">
-              {counts.reading} ativos
-            </p>
-          </div>
-          <div className="min-w-0">
-            <p className="text-[10px] uppercase text-content-muted">Concluídos</p>
-            <p className="mt-0.5 font-display text-lg font-bold text-[#a76d58]">
-              {counts.completed} lidos
-            </p>
-          </div>
-        </section>
-      </header>
-
-      <div
-        role="tablist"
-        aria-label="Filtrar biblioteca"
-        className="mt-6 flex gap-5 overflow-x-auto border-b border-border px-6"
-      >
-        {tabs.map((tab) => {
-          const isActive = activeTab === tab.id
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => setActiveTab(tab.id)}
-              className={[
-                'focus-ring shrink-0 border-b-2 pb-2 text-sm transition-colors',
-                isActive
-                  ? 'border-accent font-bold text-accent'
-                  : 'border-transparent font-medium text-content-muted hover:text-content',
-              ].join(' ')}
-            >
-              {tab.label}
-            </button>
-          )
-        })}
-      </div>
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveTab(tab.id)}
+                className={[
+                  'focus-ring shrink-0 border-b-2 pb-2 text-sm transition-colors',
+                  isActive
+                    ? 'border-accent font-bold text-accent'
+                    : 'border-transparent font-medium text-content-muted hover:text-content',
+                ].join(' ')}
+              >
+                {tab.label}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       {activeTab === 'more' ? (
