@@ -48,13 +48,12 @@ function BookCard({ userBook, onOpen }: { userBook: UserBook; onOpen: () => void
       : null
 
   const tagClass =
-    status === 'completed'
-      ? 'bg-[#a76d58]'
+    status === 'completed' || status === 'reading'
+      ? 'bg-[#a76d58] text-content'
       : status === 'want_to_read'
         ? 'bg-accent text-surface'
-        : status === 'reading'
-          ? 'bg-[#a76d58]'
-          : 'bg-surface-muted'
+        : 'bg-surface-muted text-content'
+  const tagText = status === 'reading' && progress !== null ? `${progress}%` : statusLabels[status]
 
   return (
     <button
@@ -78,17 +77,11 @@ function BookCard({ userBook, onOpen }: { userBook: UserBook; onOpen: () => void
             </div>
           )}
           <div className="absolute inset-0 bg-black/20" />
-          {status !== 'want_to_read' || progress === null ? (
-            <span
-              className={`relative z-10 -ml-1 -mt-1 w-fit max-w-full truncate rounded px-1.5 py-0.5 text-[8px] font-bold ${status === 'want_to_read' ? 'text-surface' : 'text-content'} ${tagClass}`}
-            >
-              {status === 'reading' && progress !== null ? `${progress}%` : statusLabels[status]}
-            </span>
-          ) : (
-            <span className="relative z-10 -ml-1 -mt-1 w-fit rounded bg-accent px-1.5 py-0.5 text-[8px] font-bold text-surface">
-              Novo
-            </span>
-          )}
+          <span
+            className={`relative z-10 -ml-1 -mt-1 w-fit max-w-full truncate rounded px-1.5 py-0.5 text-[8px] font-bold ${tagClass}`}
+          >
+            {tagText}
+          </span>
           <div className="relative z-10 mt-auto min-w-0">
             <p className="line-clamp-2 font-display text-[9px] font-semibold leading-tight text-content">
               {userBook.book.title}
@@ -197,7 +190,14 @@ export function LibraryPage() {
           title="Não conseguimos carregar sua biblioteca"
           description="Confira sua conexão e tente novamente."
           action={
-            <Button onClick={() => { setStatus('loading'); setRetryKey((value) => value + 1) }}>Tentar novamente</Button>
+            <Button
+              onClick={() => {
+                setLoadStatus('loading')
+                setRetryKey((value) => value + 1)
+              }}
+            >
+              Tentar novamente
+            </Button>
           }
         />
       </div>
