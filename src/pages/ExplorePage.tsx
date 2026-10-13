@@ -451,7 +451,7 @@ export function BookDetailsPage() {
   )
   const [isInLibrary, setIsInLibrary] = useState(false)
   const [libraryStatus, setLibraryStatus] = useState<'idle' | 'adding' | 'added' | 'error'>('idle')
-  const [shareStatus, setShareStatus] = useState<'idle' | 'sharing' | 'error'>('idle')
+  const [shareStatus, setShareStatus] = useState<'idle' | 'sharing' | 'success' | 'error'>('idle')
   const [shareError, setShareError] = useState<string | null>(null)
   const [synopsisExpanded, setSynopsisExpanded] = useState(false)
 
@@ -582,6 +582,7 @@ export function BookDetailsPage() {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`)
         setShareStatus('idle')
+        setShareStatus('success')
         setShareError('Link do livro copiado para a área de transferência.')
         return
       }
@@ -735,6 +736,12 @@ export function BookDetailsPage() {
 
           {shareStatus === 'error' ? (
             <p role="alert" className="text-center text-xs text-content-muted">
+              {shareError}
+            </p>
+          ) : null}
+
+          {shareStatus === 'success' ? (
+            <p role="status" className="text-center text-xs text-content-muted">
               {shareError}
             </p>
           ) : null}
