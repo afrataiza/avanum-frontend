@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Check, Pause, X } from 'lucide-react'
 import { Button, Card, FeedbackState } from '@/components/ui'
 import { libraryApi } from '@/lib/api'
 import type { UserBook } from '@/lib/api'
@@ -100,11 +99,18 @@ function BookCard({ userBook, onOpen }: { userBook: UserBook; onOpen: () => void
               {status === 'reading' && progress !== null ? (
                 <span className="px-0.5 text-[10px] font-bold leading-none">{progress}%</span>
               ) : status === 'completed' ? (
-                <Check size={14} strokeWidth={2.5} aria-hidden="true" />
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">
+                  <path d="m3 8 3.2 3.2L13 4.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               ) : status === 'paused' ? (
-                <Pause size={14} strokeWidth={2.5} aria-hidden="true" />
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true">
+                  <rect x="3" y="2.5" width="3.5" height="11" rx="1" />
+                  <rect x="9.5" y="2.5" width="3.5" height="11" rx="1" />
+                </svg>
               ) : (
-                <X size={14} strokeWidth={2.5} aria-hidden="true" />
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">
+                  <path d="m4 4 8 8M12 4l-8 8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                </svg>
               )}
             </span>
           )}
