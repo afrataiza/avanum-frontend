@@ -349,7 +349,8 @@ export function ExplorePage() {
   }
 
   return (
-    <div className="screen-padding pb-8 pt-12">
+    <div className="pb-8">
+      <div className="sticky top-0 z-10 bg-surface px-6 pb-1 pt-6">
       <header>
         <h1 className="font-display text-[28px] font-semibold leading-none text-content">
           Explorar Mundo
@@ -378,8 +379,9 @@ export function ExplorePage() {
       </form>
 
       <div className="my-5 border-b border-dashed border-content-accent-muted/70" />
+      </div>
 
-      <div>
+      <div className="screen-padding">
         {status === 'idle' ? (
           <FeedbackState
             title="Descubra sua próxima leitura"
@@ -538,35 +540,53 @@ export function BookDetailsPage() {
   }
 
   const shareBook = async () => {
-    if (!book || !book.coverUrl) {
-      setShareStatus('error')
-      setShareError('Este livro não possui uma capa disponível para compartilhar.')
-      return
-    }
+    if (!book) return
 
-    if (!navigator.share || !navigator.canShare) {
-      setShareStatus('error')
-      setShareError('O compartilhamento de imagens não está disponível neste navegador.')
-      return
-    }
+    const shareUrl = window.location.href
+    const author = book.authors.length ? book.authors.join(', ') : 'Autor desconhecido'
+    const shareText = `Confira este livro no Avanum: ${book.title} — ${author}`
 
     setShareStatus('sharing')
     setShareError(null)
 
     try {
-      const blob = await generateBookShareImage(book)
-      const file = new File([blob], 'avanum-livro.png', { type: 'image/png' })
+      if (navigator.share) {
+        if (book.coverUrl && navigator.canShare) {
+          try {
+            const blob = await generateBookShareImage(book)
+            const file = new File([blob], 'avanum-livro.png', { type: 'image/png' })
 
-      if (!navigator.canShare({ files: [file] })) {
-        throw new Error('File sharing unavailable')
+            if (navigator.canShare({ files: [file] })) {
+              await navigator.share({
+                files: [file],
+                title: book.title,
+                text: shareText,
+              })
+              setShareStatus('idle')
+              return
+            }
+          } catch (cause) {
+            if (cause instanceof DOMException && cause.name === 'AbortError') {
+              setShareStatus('idle')
+              return
+            }
+            // Se a imagem não puder ser gerada/compartilhada, compartilha o link.
+          }
+        }
+
+        await navigator.share({ title: book.title, text: shareText, url: shareUrl })
+        setShareStatus('idle')
+        return
       }
 
-      await navigator.share({
-        files: [file],
-        title: book.title,
-        text: book.authors.join(', '),
-      })
-      setShareStatus('idle')
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`)
+        setShareStatus('idle')
+        setShareError('Link do livro copiado para a área de transferência.')
+        return
+      }
+
+      throw new Error('Share and clipboard APIs are unavailable')
     } catch (cause) {
       if (cause instanceof DOMException && cause.name === 'AbortError') {
         setShareStatus('idle')
@@ -574,7 +594,7 @@ export function BookDetailsPage() {
       }
 
       setShareStatus('error')
-      setShareError('Não foi possível gerar a imagem para compartilhar.')
+      setShareError('Não foi possível compartilhar o livro nem copiar o link.')
     }
   }
 
