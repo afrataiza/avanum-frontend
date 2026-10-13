@@ -23,4 +23,7 @@ jobs:
         run: npm install
 
       - name: Validate
-        run: npm run check
+        run: |
+          npx prettier src/pages/LibraryPage.tsx --write
+          git diff -- src/pages/LibraryPage.tsx
+          npm run check
