@@ -70,7 +70,9 @@ function BookCard({
       aria-label={`Abrir ${userBook.book.title}`}
     >
       <Card className="h-full rounded-2xl p-3 transition-colors hover:border-accent-border">
-        <div className="relative flex h-[104px] w-[72px] flex-col justify-between overflow-hidden rounded-lg border border-accent-border bg-surface-muted p-2">
+        <div
+          className="relative flex h-[104px] w-[72px] flex-col justify-between overflow-hidden rounded-lg border border-accent-border bg-surface-muted p-2"
+        >
           {userBook.book.coverUrl ? (
             <img
               src={userBook.book.coverUrl}
@@ -79,24 +81,30 @@ function BookCard({
               className="absolute inset-0 h-full w-full object-cover"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-surface-muted p-1 text-center font-display text-xs font-semibold text-content-muted">
+            <div
+              className="absolute inset-0 flex items-center justify-center bg-surface-muted p-1 text-center font-display text-xs font-semibold text-content-muted"
+            >
               {userBook.book.title}
             </div>
           )}
           <div className="absolute inset-0 bg-black/20" />
           {status !== 'want_to_read' || progress === null ? (
             <span
-              className={`relative z-10 -ml-1 -mt-1 w-fit max-w-full truncate rounded px-1.5 py-0.5 text-[8px] font-bold text-content ${tagClass}`}
+              className={`relative z-10 -ml-1 -mt-1 w-fit max-w-full truncate rounded px-1.5 py-0.5 text-[8px] font-bold ${status === 'want_to_read' ? 'text-surface' : 'text-content'} ${tagClass}`}
             >
               {status === 'reading' && progress !== null ? `${progress}%` : statusLabels[status]}
             </span>
           ) : (
-            <span className="relative z-10 -ml-1 -mt-1 w-fit rounded bg-accent px-1.5 py-0.5 text-[8px] font-bold text-surface">
+            <span
+              className="relative z-10 -ml-1 -mt-1 w-fit rounded bg-accent px-1.5 py-0.5 text-[8px] font-bold text-surface"
+            >
               Novo
             </span>
           )}
           <div className="relative z-10 mt-auto min-w-0">
-            <p className="line-clamp-2 font-display text-[9px] font-semibold leading-tight text-content">
+            <p
+              className="line-clamp-2 font-display text-[9px] font-semibold leading-tight text-content"
+            >
               {userBook.book.title}
             </p>
             <p className="mt-0.5 truncate text-[7px] text-accent">
@@ -106,7 +114,9 @@ function BookCard({
         </div>
 
         <div className="mt-3 min-w-0">
-          <h2 className="line-clamp-2 font-display text-[15px] font-semibold leading-tight text-content">
+          <h2
+            className="line-clamp-2 font-display text-[15px] font-semibold leading-tight text-content"
+          >
             {userBook.book.title}
           </h2>
           <p className="mt-1 truncate text-xs text-content-muted">
@@ -115,7 +125,10 @@ function BookCard({
           {status === 'reading' && reading ? (
             <div className="mt-3">
               <div className="h-1 overflow-hidden rounded-full bg-surface-muted">
-                <div className="h-full rounded-full bg-accent" style={{ width: `${progress ?? 0}%` }} />
+                <div
+                  className="h-full rounded-full bg-accent"
+                  style={{ width: `${progress ?? 0}%` }}
+                />
               </div>
               <p className="mt-1.5 text-[10px] text-content-muted">
                 {reading.currentUnits} de {reading.totalUnits} unidades
@@ -135,7 +148,10 @@ function LibraryLoading() {
       <div className="h-16 animate-pulse rounded-xl bg-surface-muted" />
       <div className="grid grid-cols-2 gap-5">
         {[0, 1, 2, 3].map((item) => (
-          <div key={item} className="h-56 animate-pulse rounded-2xl border border-border bg-surface-elevated" />
+          <div
+            key={item}
+            className="h-56 animate-pulse rounded-2xl border border-border bg-surface-elevated"
+          />
         ))}
       </div>
     </div>
