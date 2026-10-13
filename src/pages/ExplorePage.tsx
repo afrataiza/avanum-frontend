@@ -352,33 +352,33 @@ export function ExplorePage() {
     <div className="pb-8">
       <div className="sticky top-0 z-10 bg-surface px-6 pb-1 pt-6">
       <header>
-        <h1 className="font-display text-[28px] font-semibold leading-none text-content">
-          Explorar Mundo
-        </h1>
-      </header>
+          <h1 className="font-display text-[28px] font-semibold leading-none text-content">
+            Explorar Mundo
+          </h1>
+        </header>
 
-      <form onSubmit={submit} role="search" className="mt-5">
-        <label className="sr-only" htmlFor="book-search">
-          Buscar livros ou autores
-        </label>
+        <form onSubmit={submit} role="search" className="mt-5">
+          <label className="sr-only" htmlFor="book-search">
+            Buscar livros ou autores
+          </label>
 
-        <div className="relative">
-          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-accent">
-            <SearchIcon />
-          </span>
+          <div className="relative">
+            <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-accent">
+              <SearchIcon />
+            </span>
 
-          <Input
-            id="book-search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar livros, autores..."
-            className="pl-11 pr-4"
-            autoComplete="off"
-          />
-        </div>
-      </form>
+            <Input
+              id="book-search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Buscar livros, autores..."
+              className="pl-11 pr-4"
+              autoComplete="off"
+            />
+          </div>
+        </form>
 
-      <div className="my-5 border-b border-dashed border-content-accent-muted/70" />
+        <div className="my-5 border-b border-dashed border-content-accent-muted/70" />
       </div>
 
       <div className="screen-padding">
