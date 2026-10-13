@@ -39,13 +39,7 @@ function getLibraryStatus(userBook: UserBook): LibraryStatus {
   return 'want_to_read'
 }
 
-function BookCard({
-  userBook,
-  onOpen,
-}: {
-  userBook: UserBook
-  onOpen: () => void
-}) {
+function BookCard({ userBook, onOpen }: { userBook: UserBook; onOpen: () => void }) {
   const status = getLibraryStatus(userBook)
   const reading = userBook.reading
   const progress =
@@ -70,9 +64,7 @@ function BookCard({
       aria-label={`Abrir ${userBook.book.title}`}
     >
       <Card className="h-full rounded-2xl p-3 transition-colors hover:border-accent-border">
-        <div
-          className="relative flex h-[104px] w-[72px] flex-col justify-between overflow-hidden rounded-lg border border-accent-border bg-surface-muted p-2"
-        >
+        <div className="relative flex h-[104px] w-[72px] flex-col justify-between overflow-hidden rounded-lg border border-accent-border bg-surface-muted p-2">
           {userBook.book.coverUrl ? (
             <img
               src={userBook.book.coverUrl}
@@ -81,9 +73,7 @@ function BookCard({
               className="absolute inset-0 h-full w-full object-cover"
             />
           ) : (
-            <div
-              className="absolute inset-0 flex items-center justify-center bg-surface-muted p-1 text-center font-display text-xs font-semibold text-content-muted"
-            >
+            <div className="absolute inset-0 flex items-center justify-center bg-surface-muted p-1 text-center font-display text-xs font-semibold text-content-muted">
               {userBook.book.title}
             </div>
           )}
@@ -95,16 +85,12 @@ function BookCard({
               {status === 'reading' && progress !== null ? `${progress}%` : statusLabels[status]}
             </span>
           ) : (
-            <span
-              className="relative z-10 -ml-1 -mt-1 w-fit rounded bg-accent px-1.5 py-0.5 text-[8px] font-bold text-surface"
-            >
+            <span className="relative z-10 -ml-1 -mt-1 w-fit rounded bg-accent px-1.5 py-0.5 text-[8px] font-bold text-surface">
               Novo
             </span>
           )}
           <div className="relative z-10 mt-auto min-w-0">
-            <p
-              className="line-clamp-2 font-display text-[9px] font-semibold leading-tight text-content"
-            >
+            <p className="line-clamp-2 font-display text-[9px] font-semibold leading-tight text-content">
               {userBook.book.title}
             </p>
             <p className="mt-0.5 truncate text-[7px] text-accent">
@@ -114,9 +100,7 @@ function BookCard({
         </div>
 
         <div className="mt-3 min-w-0">
-          <h2
-            className="line-clamp-2 font-display text-[15px] font-semibold leading-tight text-content"
-          >
+          <h2 className="line-clamp-2 font-display text-[15px] font-semibold leading-tight text-content">
             {userBook.book.title}
           </h2>
           <p className="mt-1 truncate text-xs text-content-muted">
@@ -161,8 +145,7 @@ function LibraryLoading() {
 export function LibraryPage() {
   const navigate = useNavigate()
   const [items, setItems] = useState<UserBook[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
+  const [loadStatus, setLoadStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [retryKey, setRetryKey] = useState(0)
   const [activeTab, setActiveTab] = useState<LibraryTab>('reading')
   const [extraStatus, setExtraStatus] = useState<ExtraStatus>('paused')
@@ -170,19 +153,15 @@ export function LibraryPage() {
   useEffect(() => {
     let active = true
 
-    setIsLoading(true)
-    setHasError(false)
-
     libraryApi
       .list()
       .then((nextItems) => {
-        if (active) setItems(nextItems)
+        if (!active) return
+        setItems(nextItems)
+        setLoadStatus('success')
       })
       .catch(() => {
-        if (active) setHasError(true)
-      })
-      .finally(() => {
-        if (active) setIsLoading(false)
+        if (active) setLoadStatus('error')
       })
 
     return () => {
@@ -209,18 +188,16 @@ export function LibraryPage() {
     return items.filter((item) => getLibraryStatus(item) === activeTab)
   }, [activeTab, extraStatus, items])
 
-  if (isLoading) return <LibraryLoading />
+  if (loadStatus === 'loading') return <LibraryLoading />
 
-  if (hasError) {
+  if (loadStatus === 'error') {
     return (
       <div className="px-6 py-12">
         <FeedbackState
           title="Não conseguimos carregar sua biblioteca"
           description="Confira sua conexão e tente novamente."
           action={
-            <Button onClick={() => setRetryKey((value) => value + 1)}>
-              Tentar novamente
-            </Button>
+            <Button onClick={() => { setStatus('loading'); setRetryKey((value) => value + 1) }}>Tentar novamente</Button>
           }
         />
       </div>
@@ -288,10 +265,12 @@ export function LibraryPage() {
 
       {activeTab === 'more' ? (
         <div className="flex gap-2 px-6 pt-4" aria-label="Outros status">
-          {([
-            { id: 'paused', label: 'Pausados' },
-            { id: 'abandoned', label: 'Interrompidos' },
-          ] as const).map((option) => (
+          {(
+            [
+              { id: 'paused', label: 'Pausados' },
+              { id: 'abandoned', label: 'Interrompidos' },
+            ] as const
+          ).map((option) => (
             <button
               key={option.id}
               type="button"
