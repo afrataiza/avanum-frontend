@@ -218,7 +218,7 @@ export function LibraryPage() {
   }
 
   return (
-    <div className="pb-8 pt-6">
+    <div className="pb-8">
       <div className="sticky top-0 z-10 bg-surface pb-1">
       <header className="space-y-3 px-6 pt-6">
         <h1 className="font-display text-[28px] font-semibold leading-tight text-content">
